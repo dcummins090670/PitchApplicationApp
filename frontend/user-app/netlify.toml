@@ -1,0 +1,12 @@
+[build]
+  base = "frontend/user-app"
+  command = "npm run build"
+  publish = "frontend/user-app/build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
