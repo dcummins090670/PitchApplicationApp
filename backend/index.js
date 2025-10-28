@@ -44,9 +44,17 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
+
+
+
+// Example API route
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello from backend!" });
+});
+
 // add a simple test route:
 app.get('/ping', (req, res) => {
-    res.send('Server is up!');
+    res.send('Server is pinging!');
 });
 
 // add a simple test route:
