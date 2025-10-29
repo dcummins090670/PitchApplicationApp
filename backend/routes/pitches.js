@@ -41,7 +41,7 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
             WHERE racecourseId = ?`, [racecourseId]
            
             );
-           CAST (p.seniorityDate AS DATE) AS seniority,
+          
 
         res.json(results);
         } catch (err) {
