@@ -13,7 +13,7 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
             `SELECT 
                 f.fixtureId,
                 f.corporateAreaAvailable,
-                DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+                CAST(f.fixtureDate AS DATE) AS fixtureDate,
                 r.racecourseId,
                 r.name AS racecourseName,
                 p.pitchId,
@@ -31,7 +31,7 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
                 ON cfp.fixtureId = f.fixtureId
                 AND cfp.pitchId = p.pitchId
                 AND cfp.permitNo = u.permitNo    
-            WHERE u.permitNo = ?  AND f.corporateAreaAvailable = TRUE AND f.fixtureDate >= CURDATE()
+            WHERE u.permitNo = ?  AND f.corporateAreaAvailable = TRUE AND f.fixtureDate >= CURRENT_DATE 
             ORDER BY f.fixtureDate`,
             [permitNo]
         );
@@ -248,11 +248,11 @@ router.get('/upcoming' ,async (req, res) => {
             const [results] = await db.query(`
            
                 SELECT f.fixtureId, f.numberOfcorporatePitches,
-                DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+                CAST(f.fixtureDate AS DATE) AS fixtureDate,
                 r.name
                 FROM Fixture f
                 JOIN Racecourse r ON f.racecourseId = r.racecourseId
-                WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 21 DAY) AND f.corporateAreaAvailable = TRUE 
+                WHERE f.fixtureDate >= CURRENT_DATE AND f.corporateAreaAvailable = TRUE 
                 ORDER BY f.fixtureDate ASC`
             );
 
@@ -311,7 +311,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         u.permitNo,
         r.name AS racecourse,
         r.racecourseId,
-        DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+        CAST(f.fixtureDate AS DATE) AS fixtureDate,
         COALESCE(cfp.location, 'Main Ring') AS location,
         COALESCE(cfp.corporateStatus, 'Not Applying') AS corporateStatus
        FROM Pitch p
@@ -320,7 +320,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
        JOIN Racecourse r ON r.racecourseId = f.racecourseId
        LEFT JOIN corporateFixturePitch cfp
               ON cfp.pitchId = p.pitchId AND cfp.fixtureId = f.fixtureId
-       WHERE f.fixtureId = ? AND u.name !='Vacant' AND cfp.location ="Main Ring & Corporate Area"
+       WHERE f.fixtureId = ? AND u.name !='Vacant' AND cfp.location ='Main Ring & Corporate Area'
        ORDER BY p.pitchId`,
       [fixtureId]
     );
@@ -479,12 +479,12 @@ router.put('/permiumFixtures/:fixtureId/:pitchId/corporate-status',authenticateT
          try {
              const [results] = await db.query(
              `SELECT f.fixtureId, 
-             DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+             CAST(f.fixtureDate AS DATE) AS fixtureDate,
              r.racecourseId,
              r.name 
              FROM Fixture f
              JOIN Racecourse r ON f.racecourseId = r.racecourseId
-             WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 28 DAY) AND f.corporateAreaAvailable = TRUE
+             WHERE f.fixtureDate >= CURRENT_DATE AND f.corporateAreaAvailable = TRUE
              ORDER BY f.fixtureDate ASC`
              );
    
@@ -504,7 +504,7 @@ router.put('/permiumFixtures/:fixtureId/:pitchId/corporate-status',authenticateT
                  const [results] = await db.query(
                 `SELECT
                     ca.id,
-                    DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate, 
+                    CAST(f.fixtureDate AS DATE) AS fixtureDate, 
                     r.racecourseId,
                     r.name AS racecourse,
                     p.pitchLabel AS location,
@@ -686,3 +686,9 @@ router.put('/permiumFixtures/:fixtureId/:pitchId/corporate-status',authenticateT
   
 
 module.exports = router;
+
+// DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+// CAST(f.fixtureDate AS DATE) AS fixtureDate,
+
+// WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 28 DAY)
+// WHERE f.fixtureDate > CURRENT_DATE  

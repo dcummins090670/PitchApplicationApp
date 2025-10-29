@@ -13,7 +13,7 @@ router.get('/my-premium-pitches', authenticateToken, authorizeRoles('bookmaker')
             `SELECT 
                 f.fixtureId,
                 f.premiumAreaAvailable,
-                DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+                CAST(f.fixtureDate AS DATE) AS fixtureDate,
                 r.racecourseId,
                 r.name AS racecourseName,
                 p.pitchId,
@@ -31,7 +31,7 @@ router.get('/my-premium-pitches', authenticateToken, authorizeRoles('bookmaker')
                 ON pfp.fixtureId = f.fixtureId
                 AND pfp.pitchId = p.pitchId
                 AND pfp.permitNo = u.permitNo    
-            WHERE u.permitNo = ?  AND f.premiumAreaAvailable = TRUE AND f.fixtureDate >= CURDATE()
+            WHERE u.permitNo = ?  AND f.premiumAreaAvailable = TRUE AND f.fixtureDate >= CURRENT_DATE  
             ORDER BY f.fixtureDate`,
             [permitNo]
         );
@@ -248,11 +248,11 @@ router.get('/upcoming' ,async (req, res) => {
             const [results] = await db.query(`
            
                 SELECT f.fixtureId, f.numberOfPremiumPitches,
-                DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+                CAST(f.fixtureDate AS DATE) AS fixtureDate,
                 r.name
                 FROM Fixture f
                 JOIN Racecourse r ON f.racecourseId = r.racecourseId
-                WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 21 DAY) AND f.premiumAreaAvailable = TRUE 
+                WHERE f.fixtureDate >= CURRENT_DATE AND f.premiumAreaAvailable = TRUE 
                 ORDER BY f.fixtureDate ASC`
             );
 
@@ -311,7 +311,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         u.permitNo,
         r.name AS racecourse,
         r.racecourseId,
-        DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+        CAST(f.fixtureDate AS DATE) AS fixtureDate,
         COALESCE(pfp.location, 'Main Ring') AS location,
         COALESCE(pfp.premiumStatus, 'Not Applying') AS premiumStatus
        FROM Pitch p
@@ -320,7 +320,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
        JOIN Racecourse r ON r.racecourseId = f.racecourseId
        LEFT JOIN PremiumFixturePitch pfp
               ON pfp.pitchId = p.pitchId AND pfp.fixtureId = f.fixtureId
-       WHERE f.fixtureId = ? AND u.name !='Vacant' AND pfp.location ="Premium Area"
+       WHERE f.fixtureId = ? AND u.name !='Vacant' AND pfp.location ='Premium Area'
        ORDER BY p.pitchId`,
       [fixtureId]
     );
@@ -479,12 +479,12 @@ router.put('/permiumFixtures/:fixtureId/:pitchId/premium-status',authenticateTok
          try {
              const [results] = await db.query(
              `SELECT f.fixtureId, 
-             DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+             CAST(f.fixtureDate AS DATE) AS fixtureDate,
              r.racecourseId,
              r.name 
              FROM Fixture f
              JOIN Racecourse r ON f.racecourseId = r.racecourseId
-             WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 28 DAY) AND f.premiumAreaAvailable = TRUE
+             WHERE f.fixtureDate >= CURRENT_DATE AND f.premiumAreaAvailable = TRUE
              ORDER BY f.fixtureDate ASC`
              );
    
@@ -504,7 +504,7 @@ router.put('/permiumFixtures/:fixtureId/:pitchId/premium-status',authenticateTok
                  const [results] = await db.query(
                 `SELECT
                     pa.id,
-                    DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate, 
+                    CAST(f.fixtureDate AS DATE) AS fixtureDate,
                     r.racecourseId,
                     r.name AS racecourse,
                     p.pitchLabel AS location,

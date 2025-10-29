@@ -10,27 +10,8 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
 
     try {
         const [results] = await db.query (
-            `SELECT 
-                f.fixtureId,
-                DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
-                r.name AS racecourseName,
-                p.pitchId,
-                p.pitchLabel,
-                p.pitchNo,
-            COALESCE(fp.status, 'Not Working') AS status   
-            FROM users u
-            JOIN Pitch p 
-                ON u.permitNo = p.ownerPermitNo
-            JOIN Racecourse r 
-                ON p.racecourseId = r.racecourseId
-            JOIN Fixture f
-                ON r.racecourseId = f.racecourseId                
-            LEFT JOIN fixturePitch fp
-                ON fp.fixtureId = f.fixtureId
-                AND fp.pitchId = p.pitchId
-                AND fp.permitNo = u.permitNo    
-            WHERE u.permitNo = ?  AND f.fixtureDate >= CURDATE()
-            ORDER BY f.fixtureDate`,
+            `
+            `,
             [permitNo]
         );
     // Left Join with FixturePitchStatus ensures we always see a row, even if no status has been set yet.
@@ -247,7 +228,7 @@ router.get('/currentyear', async (req, res) => {
             const [results] = await db.query(`
            
                 SELECT f.fixtureId, 
-                DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+                CAST(f.fixtureDate AS DATE) AS fixtureDate,
                 r.name
                 FROM Fixture f
                 JOIN Racecourse r ON f.racecourseId = r.racecourseId
@@ -270,14 +251,14 @@ router.get('/upcoming', async (req, res) => {
             const [results] = await db.query(`
            
                 SELECT f.fixtureId, 
-                DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+                CAST(f.fixtureDate AS DATE) AS fixtureDate,
                 r.racecourseId,
                 r.name,
                 f.premiumAreaAvailable,
                 f.corporateAreaAvailable
                 FROM Fixture f
                 JOIN Racecourse r ON f.racecourseId = r.racecourseId
-                WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 21 DAY)
+                WHERE f.fixtureDate > CURRENT_DATE 
                 ORDER BY f.fixtureDate ASC`
             );
 
@@ -337,7 +318,7 @@ router.get('/:fixtureId/attended-pitches', async (req, res) => {
         u.permitNo,
         r.name AS racecourse,
         r.racecourseId,
-        DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+        CAST(f.fixtureDate AS DATE) AS fixtureDate,
         COALESCE(fp.status, 'Not Working') AS status,
         COALESCE(fp.attendance, 'Did Not Attend') AS attendance
        FROM Pitch p
@@ -346,7 +327,7 @@ router.get('/:fixtureId/attended-pitches', async (req, res) => {
        JOIN Racecourse r ON r.racecourseId = f.racecourseId
        LEFT JOIN FixturePitch fp
               ON fp.pitchId = p.pitchId AND fp.fixtureId = f.fixtureId
-       WHERE f.fixtureId = ? AND u.name !='Vacant' AND attendance ="Attended"
+       WHERE f.fixtureId = ? AND u.name !='Vacant' AND attendance = 'Attended'
        ORDER BY p.pitchId`,
       [fixtureId]
     );
@@ -506,13 +487,13 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
         try {
             const [results] = await db.query(
             `SELECT f.fixtureId, 
-            DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+            CAST(f.fixtureDate AS DATE) AS fixtureDate,
             r.racecourseId,
             r.name,
             f.premiumAreaAvailable
             FROM Fixture f
             JOIN Racecourse r ON f.racecourseId = r.racecourseId
-            WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 28 DAY) 
+            WHERE f.fixtureDate > CURRENT_DATE 
             ORDER BY f.fixtureDate ASC`
             );
 
@@ -532,7 +513,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
                      const [results] = await db.query(
                     `SELECT
                         pa.id,
-                        DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate, 
+                        CAST(f.fixtureDate AS DATE) AS fixtureDate,
                         r.racecourseId,
                         r.name AS racecourse,
                         p.pitchLabel AS location,
@@ -640,3 +621,10 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
    
 
 module.exports = router;
+
+
+ // DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
+// CAST(f.fixtureDate AS DATE) AS fixtureDate,
+
+// WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 28 DAY)
+// WHERE f.fixtureDate > CURRENT_DATE  

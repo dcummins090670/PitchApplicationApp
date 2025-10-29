@@ -33,7 +33,7 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
 
             SELECT p.pitchId,
             u.name, 
-            DATE_FORMAT(p.seniorityDate, '%Y-%m-%d') AS seniority,
+            CAST(p.seniorityDate AS DATE) AS seniority,
             p.pitchLabel,
             p.pitchNo
             FROM Pitch p
@@ -41,7 +41,7 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
             WHERE racecourseId = ?`, [racecourseId]
            
             );
-           
+           CAST (p.seniorityDate AS DATE) AS seniority,
 
         res.json(results);
         } catch (err) {
@@ -104,3 +104,5 @@ router.post('/:permitNo/attendance', authenticateToken, authorizeRoles('sis'), (
 module.exports = router;
 
 
+// DATE_FORMAT(p.seniorityDate, '%Y-%m-%d') AS seniority,
+// CAST(p.seniorityDate AS DATE) AS seniority,
