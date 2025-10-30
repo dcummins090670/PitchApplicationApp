@@ -315,7 +315,7 @@ function FixturesPage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchId} className={`hover:bg-red-200 ${
+                <tr key={p.pitchid} className={`hover:bg-red-200 ${
                 p.status === "Applied" ? "bg-green-300" : "bg-gray-300"
                 }`} // Change background colour of the row to green if fixture.status has applied to work
                 > 

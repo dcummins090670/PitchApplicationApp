@@ -78,13 +78,13 @@ function LoginPage() {
             {/* Permit No */}
             <div>
               <label
-                htmlFor="permitno"
+                htmlFor="permitNo"
                 className="block text-gray-700 font-medium mb-1"
               >
                 Permit No
               </label>
               <input
-                id="permitno"
+                id="permitNo"
                 type="text"
                 placeholder="Enter Permit No"
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"

@@ -414,7 +414,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
 // 
 // PostgreSQL: Get fixtures + pitches for the logged-in bookmaker
 router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {    
-    const permitNo = req.user.permitno; // from JWT
+    const permitNo = req.user.permitNo; // from JWT
 
     try {
         const result = await db.query (
@@ -574,7 +574,7 @@ router.get('/upcoming', async (req, res) => {
                         CAST(f.fixturedate AS DATE) AS fixturedate,
                         r.racecourseid,
                         r.name,
-                        f.premiumareaAvailable,
+                        f.premiumareaavailable,
                         f.corporateareaavailable
                 FROM fixture f
                 JOIN racecourse r ON f.racecourseid = r.racecourseid
