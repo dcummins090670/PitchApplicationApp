@@ -8,3 +8,13 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 18
+
+  - type: web
+    name: my-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: "build"
+    envVars:
+      - key: REACT_APP_API_BASE_URL
+        value: https://pitchapplicationapp-backend.onrender.com
