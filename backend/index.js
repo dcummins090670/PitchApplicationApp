@@ -3,8 +3,13 @@ const express  = require('express');
 const cors  = require ('cors');
 
 const mysql  = require('mysql2');
+
+const pkg = require('pg');
+
+
 //import users from "./user.js"
 //const users = require('./user');
+
 const db = require('./config/db');
 
 

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/authMiddleware');
 
+
+ /*This is the code for MySQL only --
 // Get fixtures for this bookmaker
 router.get('/fixtures', authenticateToken, authorizeRoles('bookmaker'), (req, res) => {
     const permitNo = req.user.permitNo;
@@ -58,14 +60,6 @@ router.post('/fixtures/:fixtureId/pitches/:pitchId/intention', authenticateToken
     });
 });
 
-/*
-// Bookmaker marks intention to work a pitch
-router.post('/intention', authenticateToken, authorizeRoles('bookmaker'), (req, res) => {
-    // DB code to store their intention
-    res.json({ message: 'Intention recorded' });
-});
-*/
-
 // View all bookmakers who indicated their intention
 router.get('/intentions', authenticateToken, authorizeRoles('bookmaker'), (req, res) => {
     // DB query to fetch intentions
@@ -77,5 +71,53 @@ router.post('/attendance', authenticateToken, authorizeRoles('bookmaker'), (req,
     // DB code to mark attendance
     res.json({ message: 'Attendance confirmed' });
 });
+*/
+
+// PostgreSQL code
+
+//Get fixtures for this bookmaker
+router.get('/fixtures', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {
+    const permitNo = req.user.permitNo;
+
+    const sql = `
+        SELECT DISTINCT f.id, f.fixturedate, f.location
+        FROM fixture f
+        JOIN fixturePitch fp ON f.id = fp.fixtureid
+        JOIN pitch p ON p.id = fp.pitchid
+        WHERE p.permitNo = $1
+        ORDER BY f.fixturedate ASC
+    `;
+    try {
+    const result = await db.query(sql, [permitNo]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching fixtures:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Get pitches for a specific fixture
+router.get('/fixtures/:fixtureId/pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {
+    const fixtureId = req.params.fixtureId;
+    const permitNo = req.user.permitNo;
+
+    const sql = `
+        SELECT p.id, p.pitchname
+        FROM pitch p
+        JOIN fixturePitch fp ON p.id = fp.pitchid
+        WHERE fp.fixtureid = $1 AND p.permitNo = $2
+    `;
+
+    try {
+      const result = await db.query(sql, [fixtureId, permitNo]);
+      res.json(result.rows);
+    } catch (err) {
+      console.error('Error fetching pitches:', err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  }
+);
+
+
 
 module.exports = router;
