@@ -18,7 +18,6 @@ function LoginPage() {
     setError('');
     
     try {
-      //const response = await fetch('http://localhost:5000/api/auth/login', {
        // const response = await fetch('/api/auth/login', {
        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
@@ -34,15 +33,11 @@ function LoginPage() {
 
       const data = await response.json();
       localStorage.setItem('token', data.token);
-      //localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('user', JSON.stringify({role:data.role})); // *1 -user object contains 'role' see above
       login(data.token, data.user);  // call Context Login for token and user
       login(data.token, {role: data.role});  // *2 - update version - see above
             
-      // Optional: store user role if returned
-      // localStorage.setItem('role', data.role);
-
-
+      
       // Navigate based on role
       if (data.role === "bookmaker") {
         navigate("/my-pitches");
@@ -51,10 +46,7 @@ function LoginPage() {
       } else if (data.role === "admin") {
         navigate("/fixtures");
       }
-
-      /* 
-      navigate('/my-pitches');  // redirect after login
-      */  
+      
     } catch (err) {
       console.error('Login error:', err);
       setError(err.message);
@@ -144,45 +136,3 @@ function LoginPage() {
 
 export default LoginPage;
 
-//<div className="container mx-auto p-2 max-w-md">
-/*
-<section className="relative bg-cover bg-center bg-[url('./assets/bettingRing.jpg')] flex items-center justify-center text-center bg-blue-500 py-80">
-   
-    
-      
-      
-      <form onSubmit={handleSubmit} className="space-y-2">
-             
-        <div>
-          
-          <input id="permitNo"
-            type="text"
-            placeholder='Permit No.'
-            className="w-full p-2 border border-blue-800 rounded"
-            value={permitNo}
-            onChange={e => setPermitNo(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          
-          <input id="password"
-            type="password"
-            placeholder='Password'
-            className="w-full p-2 border border-blue-800 rounded"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-800"
-        >
-          Log In
-        </button>
-        {error && <p className="text-white bg-red-600 mb-8">{error}</p>}
-      </form>
-     </section> 
-
-     */
