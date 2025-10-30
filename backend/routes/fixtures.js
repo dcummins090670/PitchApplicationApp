@@ -570,16 +570,16 @@ router.get('/upcoming', async (req, res) => {
         try {
             const result = await db.query(`
            
-                SELECT f.fixtureId, 
-                        CAST(f.fixtureDate AS DATE) AS fixtureDate,
-                        r.racecourseId,
+                SELECT f.fixtureid, 
+                        CAST(f.fixturedate AS DATE) AS fixturedate,
+                        r.racecourseid,
                         r.name,
-                        f.premiumAreaAvailable,
-                        f.corporateAreaAvailable
-                FROM Fixture f
-                JOIN Racecourse r ON f.racecourseId = r.racecourseId
-                WHERE f.fixtureDate >= CURRENT_DATE 
-                ORDER BY f.fixtureDate ASC`
+                        f.premiumareaAvailable,
+                        f.corporateareaavailable
+                FROM fixture f
+                JOIN racecourse r ON f.racecourseid = r.racecourseid
+                WHERE f.fixturedate >= CURRENT_DATE 
+                ORDER BY f.fixturedate ASC`
             );
 
             const results = result.rows;
@@ -593,29 +593,29 @@ router.get('/upcoming', async (req, res) => {
 
 // Get attended pitches for a specific fixture
 router.get('/:fixtureId/pitches', async (req, res) => {
-  const { fixtureId } = req.params;
+  const { fixtureid } = req.params;
 
   try {
     const result = await db.query(
       `SELECT 
-            p.pitchId, 
-            p.pitchLabel, 
-            p.pitchNo, 
-            u.name AS bookmakerName,
-            u.permitNo,
+            p.pitchid, 
+            p.pitchlabel, 
+            p.pitchno, 
+            u.name AS bookmakername,
+            u.permitno,
             r.name AS racecourse,
-            r.racecourseId,
+            r.racecourseid,
             COALESCE(fp.status, 'Not Working') AS status,
             COALESCE(fp.attendance, 'Did Not Attend') AS attendance
-       FROM Pitch p
-       JOIN Users u ON u.permitNo = p.ownerPermitNo
-       JOIN Fixture f ON f.racecourseId = p.racecourseId
-       JOIN Racecourse r ON r.racecourseId = f.racecourseId
-       LEFT JOIN FixturePitch fp
-              ON fp.pitchId = p.pitchId AND fp.fixtureId = f.fixtureId
-       WHERE f.fixtureId = $1 AND u.name !='Vacant'
-       ORDER BY p.pitchId`,
-      [fixtureId]
+       FROM pitch p
+       JOIN users u ON u.permitno = p.ownerpermitno
+       JOIN fixture f ON f.racecourseid = p.racecourseid
+       JOIN racecourse r ON r.racecourseid = f.racecourseid
+       LEFT JOIN fixturepitch fp
+              ON fp.pitchid = p.pitchid AND fp.fixtureid = f.fixtureid
+       WHERE f.fixtureid = $1 AND u.name !='Vacant'
+       ORDER BY p.pitchid`,
+      [fixtureid]
     );
     const results = result.rows;
     res.json(results);

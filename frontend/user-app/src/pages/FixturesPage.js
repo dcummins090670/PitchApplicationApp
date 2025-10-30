@@ -12,7 +12,7 @@ function FixturesPage() {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        //const response = await fetch("http://localhost:5000/api/fixtures/upcoming",
+        
         const response = await fetch(`${API_BASE_URL}/api/fixtures/upcoming`,          
         {    
           headers: {
@@ -49,7 +49,7 @@ function FixturesPage() {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
-      //const response = await fetch(`http://localhost:5000/api/fixtures/${fixtureId}/pitches`,
+      
       const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}/pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
