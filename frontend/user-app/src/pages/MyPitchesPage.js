@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 function MyPitchesPage() {
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(true);
- 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
+
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
@@ -192,6 +193,7 @@ return (
 function MyPitchesPage() {
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(true);
+   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
  
   useEffect(() => {
     const fetchFixtures = async () => {
@@ -252,7 +254,7 @@ function MyPitchesPage() {
       // update UI with new status if successful
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
-          fixture.fixtureid === fixtureId && fixture.pitchid === pitchid
+          fixture.fixtureid === fixtureid && fixture.pitchid === pitchid
             ? { ...fixture, status: newStatus }
             : fixture
         )
