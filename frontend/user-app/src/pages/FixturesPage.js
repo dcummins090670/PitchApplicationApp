@@ -5,13 +5,15 @@ function FixturesPage() {
   //const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
+  // to allow for testing locally and online
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
         //const response = await fetch("http://localhost:5000/api/fixtures/upcoming",
-        const response = await fetch("/api/fixtures/upcoming",          
+        const response = await fetch(`${API_BASE_URL}/api/fixtures/upcoming`,          
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +50,7 @@ function FixturesPage() {
     try {
       const token = localStorage.getItem("token");
       //const response = await fetch(`http://localhost:5000/api/fixtures/${fixtureId}/pitches`,
-      const response = await fetch(`/api/fixtures/${fixtureId}/pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}/pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
 

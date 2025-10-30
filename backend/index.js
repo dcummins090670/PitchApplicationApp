@@ -1,10 +1,15 @@
 require ('dotenv').config();
 const express  = require('express');
 const cors  = require ('cors');
+app.use(cors({
+  origin: [
+    "http://localhost:3000",                     // local dev
+    "https://pitchapplicationapp.onrender.com"  // deployed frontend
+  ],
+  credentials: true
+}));
 
-//const mysql  = require('mysql2');
-
-//const pkg = require('pg');
+const mysql  = require('mysql2');
 
 
 //import users from "./user.js"
@@ -14,7 +19,6 @@ const db = require('./config/db');
 
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
 // Routes
