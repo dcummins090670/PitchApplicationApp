@@ -414,7 +414,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
 // 
 // PostgreSQL: Get fixtures + pitches for the logged-in bookmaker
 router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {    
-    const permitNo = req.user.permitNo; // from JWT
+    const permitNo = req.user.permitno; // from JWT
 
     try {
         const result = await db.query (
@@ -552,7 +552,7 @@ router.get('/currentyear', async (req, res) => {
                 r.name
                 FROM fixture f
                 JOIN racecourse r ON f.racecourseid = r.racecourseid
-                WHERE f.fixturedate BETWEEN '2025-01-01' AND '2025-12-31'
+                WHERE f.fixturedate >= CURRENT_DATE
                 ORDER BY f.fixturedate ASC`
             );
             const results = result.rows;
