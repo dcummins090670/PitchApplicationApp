@@ -202,11 +202,11 @@ function FixturesPage() {
 
     
    const handleFixtureChange = async (e) => {
-    const fixtureid = e.target.value;
+    const fixtureId = e.target.value;
     //const fixture = fixtures.find(f => f.fixtureId === parseInt(fixtureId));
    //await fetchPitches(fixtureId);
-    if (fixtureid) {
-      await fetchPitches(fixtureid);
+    if (fixtureId) {
+      await fetchPitches(fixtureId);
     } else {
       setPitches([]);
     }
@@ -214,12 +214,12 @@ function FixturesPage() {
     
 
     // This will use the fixtureId to fetch the pitches
-    const fetchPitches = async (fixtureid) => {
+    const fetchPitches = async (fixtureId) => {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
       
-      const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureid}/pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}/pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -310,6 +310,7 @@ function FixturesPage() {
                 <th className="border px-2 sm:px-4 py-2 text-left">Bookmaker</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch No</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Status</th>
+                
               </tr>
             </thead>
             <tbody>

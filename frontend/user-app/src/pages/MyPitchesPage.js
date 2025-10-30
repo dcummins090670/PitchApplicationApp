@@ -220,10 +220,10 @@ function MyPitchesPage() {
   }, []);
 
   // Extra code to handle status change
-  const handleStatusChange = async (fixtureid, pitchid, newStatus, oldStatus) => {
+  const handleStatusChange = async (fixtureId, pitchId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/api/fixtures/my-pitches/${fixtureid}/${pitchid}/status`,        
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/my-pitches/${fixtureId}/${pitchId}/status`,        
         {
           method: "PUT",
           headers: {
@@ -242,7 +242,7 @@ function MyPitchesPage() {
         // revert to old status if backend rejects
         setFixtures((prevFixtures) =>
           prevFixtures.map((fixture) =>
-            fixture.fixtureid === fixtureid && fixture.pitchid === pitchid
+            fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
               ? { ...fixture, status: oldStatus }
               : fixture
           )
@@ -254,7 +254,7 @@ function MyPitchesPage() {
       // update UI with new status if successful
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
-          fixture.fixtureid === fixtureid && fixture.pitchid === pitchid
+          fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
             ? { ...fixture, status: newStatus }
             : fixture
         )
