@@ -496,7 +496,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
 // Get fixtures + pitches for the logged-in bookmaker
 //router.get('/my-fixtures', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {
 router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {    
-    const permitNo = req.user.permitno; // from JWT
+    const permitNo = req.user.permitNo; // from JWT
 
     try {
         const result = await db.query (
@@ -541,7 +541,7 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
 router.put('/my-corporate-pitches/:fixtureId/:pitchId/:racecourseId/corporate-status',authenticateToken,authorizeRoles('bookmaker'),async (req, res) => {
         const { fixtureId, pitchId, racecourseId } = req.params;
         const { corporateStatus } = req.body;
-        const permitNo = req.user.permitno; // from JWT
+        const permitNo = req.user.permitNo; // from JWT
 
         const validStatuses = ['Not Applying', 'Applied'];
         if (!validStatuses.includes(corporateStatus)) {

@@ -414,7 +414,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
 // 
 // PostgreSQL: Get fixtures + pitches for the logged-in bookmaker
 router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {    
-    const permitNo = req.user.permitno; // from JWT
+    const permitNo = req.user.permitNo; // from JWT
 
     try {
         const result = await db.query (
@@ -453,16 +453,18 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
 
 });
 
-// PostgreSQL: Update pitch status for a fixture (Bookmaker version with time rules) - Used when bookmker select a meeting to indicate status - "Working/Not Working)"
+// PostgreSQL: Update pitch status for a fixture - when bookmker select a meeting to indicate status - "Working/Not Working)"
 router.put('/my-pitches/:fixtureid/:pitchid/status',authenticateToken,authorizeRoles('bookmaker' ), async (req, res) => {
         const { fixtureId, pitchId } = req.params;
         const { status } = req.body;
-        const permitNo = req.user.permitno; // from JWT
+        const permitNo = req.user.permitNo; // from JWT
 
         const validStatuses = ['Not Working', 'Applied'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ error: 'Invalid status for bookmaker' });
         }
+
+        console.log("Status update:", { fixtureId, pitchId, permitNo, status });
 
         try {
             // Get fixture date for time checks

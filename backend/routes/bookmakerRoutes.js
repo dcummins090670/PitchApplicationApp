@@ -77,7 +77,7 @@ router.post('/attendance', authenticateToken, authorizeRoles('bookmaker'), (req,
 
 //Get fixtures for this bookmaker
 router.get('/fixtures', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {
-    const permitNo = req.user.permitno;
+    const permitNo = req.user.permitNo;
 
     const sql = `
         SELECT DISTINCT f.id, f.fixturedate, f.location
@@ -99,7 +99,7 @@ router.get('/fixtures', authenticateToken, authorizeRoles('bookmaker'), async (r
 // Get pitches for a specific fixture
 router.get('/fixtures/:fixtureId/pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {
     const fixtureId = req.params.fixtureId;
-    const permitNo = req.user.permitno;
+    const permitNo = req.user.permitNo;
 
     const sql = `
         SELECT p.id, p.pitchname

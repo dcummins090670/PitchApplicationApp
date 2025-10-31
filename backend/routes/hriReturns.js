@@ -51,7 +51,7 @@ router.post("/", authenticateToken, authorizeRoles ('bookmaker'), async (req, re
 router.post("/", authenticateToken, authorizeRoles ('bookmaker'), async (req, res) => {
   try {
     const { fixtureId,  ...values } = req.body;
-    const permitNo = req.user.permitno;
+    const permitNo = req.user.permitNo;
    
     console.log("Incoming body:", req.body);
    
