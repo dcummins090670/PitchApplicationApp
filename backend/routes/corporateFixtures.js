@@ -501,27 +501,27 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
     try {
         const result = await db.query (
             `SELECT 
-                f.fixtureId,
-                f.corporateAreaAvailable,
-                CAST(f.fixtureDate AS DATE) AS fixtureDate,
-                r.racecourseId,
-                r.name AS racecourseName,
-                p.pitchId,
-                p.pitchLabel,
-                p.pitchNo,
-            COALESCE(cfp.corporateStatus, 'Not Applying') AS corporateStatus   
+                f.fixtureid,
+                f.corporateareaavailable,
+                CAST(f.fixturedate AS DATE) AS fixturedate,
+                r.racecourseid,
+                r.name AS racecoursename,
+                p.pitchid,
+                p.pitchlabel,
+                p.pitchno,
+            COALESCE(cfp.corporatestatus, 'Not Applying') AS corporatestatus   
             FROM users u
-            JOIN Pitch p 
-                ON u.permitNo = p.ownerPermitNo
-            JOIN Racecourse r 
-                ON p.racecourseId = r.racecourseId
+            JOIN pitch p 
+                ON u.permitno = p.ownerpermitno
+            JOIN racecourse r 
+                ON p.racecourseid = r.racecourseid
             JOIN Fixture f
-                ON r.racecourseId = f.racecourseId                
-            LEFT JOIN corporateFixturePitch cfp
-                ON cfp.fixtureId = f.fixtureId
-                AND cfp.pitchId = p.pitchId
-                AND cfp.permitNo = u.permitNo    
-            WHERE u.permitNo = $1  AND f.corporateAreaAvailable = TRUE AND f.fixtureDate >= CURRENT_DATE 
+                ON r.racecourseid = f.racecourseid                
+            LEFT JOIN corporatefixturepitch cfp
+                ON cfp.fixtureid = f.fixtureid
+                AND cfp.pitchid = p.pitchid
+                AND cfp.permitno = u.permitno    
+            WHERE u.permitno = $1  AND f.corporateareaavailable = TRUE AND f.fixturedate >= CURRENT_DATE 
             ORDER BY f.fixtureDate`,
             [permitNo]
         );
@@ -551,10 +551,10 @@ router.put('/my-corporate-pitches/:fixtureId/:pitchId/:racecourseId/corporate-st
         try {
             // Get fixture date for time checks
             const fixture = await db.query (
-                `SELECT f.fixtureDate
-                 FROM Fixture f
-                 JOIN Pitch p ON p.racecourseId = f.racecourseId
-                 WHERE f.fixtureId = $1 AND p.pitchId = $2 AND p.racecourseId = $3 AND p.ownerPermitNo = $4`,
+                `SELECT f.fixturedate
+                 FROM fixture f
+                 JOIN pitch p ON p.racecourseid = f.racecourseid
+                 WHERE f.fixtureid = $1 AND p.pitchid = $2 AND p.racecourseid = $3 AND p.ownerpermitno = $4`,
                 [fixtureId, pitchId, racecourseId, permitNo]
             );
             const fixtureRows = fixture.rows;
@@ -562,7 +562,7 @@ router.put('/my-corporate-pitches/:fixtureId/:pitchId/:racecourseId/corporate-st
                 return res.status(404).json({ error: 'Fixture or pitch not found for this bookmaker' });
             }
 
-            const fixtureDate = new Date(fixtureRows[0].fixtureDate);
+            const fixtureDate = new Date(fixtureRows[0].fixturedate);
             const now = new Date();
 
             // Time rules
@@ -590,24 +590,24 @@ router.put('/my-corporate-pitches/:fixtureId/:pitchId/:racecourseId/corporate-st
 
             // Ensure FixturePitchStatus record exists
             const result = await db.query(
-                `SELECT * FROM corporateFixturePitch WHERE fixtureId = $1 AND pitchId = $2 AND racecourseId = $3`,
+                `SELECT * FROM corporatefixturePitch WHERE fixtureid = $1 AND pitchid = $2 AND racecourseid = $3`,
                 [fixtureId, pitchId, racecourseId]
             );
             const existing = result.rows;
             if (existing.length === 0) {
                 // Create it if not found
                 await db.query(
-                    `INSERT INTO corporateFixturePitch (fixtureId, pitchId, racecourseId, permitNo, corporateStatus, updatedAt)
+                    `INSERT INTO corporatefixturepitch (fixtureid, pitchid, racecourseid, permitno, corporatestatus, updatedat)
                      VALUES ($1, $2, $3, $4, $5, NOW())`,
                     [fixtureId, pitchId, racecourseId, permitNo, corporateStatus]
                 );
             } else {
                 // Update existing
                 await db.query(
-                    `UPDATE corporateFixturePitch
-                     SET corporateStatus = $1, updatedAt = NOW()
-                     WHERE fixtureId = $2 AND pitchId = $3 AND racecourseId = $4`,
-                    [corporateStatus, fixtureId, pitchId, racecourseId]
+                    `UPDATE corporatefixturepitch
+                     SET corporatestatus = $4, updatedat = NOW()
+                     WHERE fixtureid = $1 AND pitchid = $2 AND racecourseid = $3`,
+                    [fixtureId, pitchId, racecourseId, corporateStatus]
                 );
             }
 
@@ -631,13 +631,13 @@ router.get('/upcoming' ,async (req, res) => {
         try {
             const result = await db.query(`
            
-                SELECT f.fixtureId, f.numberOfcorporatePitches,
-                CAST(f.fixtureDate AS DATE) AS fixtureDate,
+                SELECT f.fixtureid, f.numberofcorporatepitches,
+                CAST(f.fixturedate AS DATE) AS fixturedate,
                 r.name
-                FROM Fixture f
-                JOIN Racecourse r ON f.racecourseId = r.racecourseId
-                WHERE f.fixtureDate >= CURRENT_DATE AND f.corporateAreaAvailable = TRUE 
-                ORDER BY f.fixtureDate ASC`
+                FROM fixture f
+                JOIN racecourse r ON f.racecourseid = r.racecourseid
+                WHERE f.fixturedate >= CURRENT_DATE AND f.corporateareaavailable = TRUE 
+                ORDER BY f.fixturedate ASC`
             );
 
             const results = result.rows;
@@ -655,23 +655,23 @@ router.get('/:fixtureId/corporate-pitches', async (req, res) => {
   try {
     const result = await db.query(
       `SELECT 
-        p.pitchId, 
-        p.pitchLabel, 
-        p.pitchNo, 
-        u.name AS bookmakerName,
-        u.permitNo,
+        p.pitchid, 
+        p.pitchlabel, 
+        p.pitchno, 
+        u.name AS bookmakername,
+        u.permitno,
         r.name AS racecourse,
-        r.racecourseId,
-        COALESCE(cfp.corporateStatus, 'Not Applying') AS corporateStatus,
+        r.racecourseid,
+        COALESCE(cfp.corporatestatus, 'Not Applying') AS corporatestatus,
         COALESCE(cfp.location, 'Main Ring') AS location
-       FROM Pitch p
-       JOIN Users u ON u.permitNo = p.ownerPermitNo
-       JOIN Fixture f ON f.racecourseId = p.racecourseId
-       JOIN Racecourse r ON r.racecourseId = f.racecourseId
-       LEFT JOIN corporateFixturePitch cfp
-              ON cfp.pitchId = p.pitchId AND cfp.fixtureId = f.fixtureId
-       WHERE f.fixtureId = $1 AND u.name !='Vacant' AND cfp.corporateStatus = 'Applied'
-       ORDER BY p.pitchId`,
+       FROM pitch p
+       JOIN users u ON u.permitno = p.ownerpermitno
+       JOIN fixture f ON f.racecourseid = p.racecourseid
+       JOIN racecourse r ON r.racecourseid = f.racecourseid
+       LEFT JOIN corporatefixturepitch cfp
+              ON cfp.pitchid = p.pitchid AND cfp.fixtureid = f.fixtureid
+       WHERE f.fixtureid = $1 AND u.name !='Vacant' AND cfp.corporatestatus = 'Applied'
+       ORDER BY p.pitchid`,
       [fixtureId]
     );
     const results = result.rows;
@@ -689,24 +689,24 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
   try {
     const result = await db.query(
       `SELECT 
-        p.pitchId, 
-        p.pitchLabel, 
+        p.pitchid, 
+        p.pitchlabel, 
         p.pitchNo, 
-        u.name AS bookmakerName,
-        u.permitNo,
+        u.name AS bookmakername,
+        u.permitno,
         r.name AS racecourse,
         r.racecourseId,
-        CAST(f.fixtureDate AS DATE) AS fixtureDate,
+        CAST(f.fixturedate AS DATE) AS fixturedate,
         COALESCE(cfp.location, 'Main Ring') AS location,
-        COALESCE(cfp.corporateStatus, 'Not Applying') AS corporateStatus
-       FROM Pitch p
-       JOIN Users u ON u.permitNo = p.ownerPermitNo
-       JOIN Fixture f ON f.racecourseId = p.racecourseId
-       JOIN Racecourse r ON r.racecourseId = f.racecourseId
-       LEFT JOIN corporateFixturePitch cfp
-              ON cfp.pitchId = p.pitchId AND cfp.fixtureId = f.fixtureId
-       WHERE f.fixtureId = $1 AND u.name !='Vacant' AND cfp.location ='Main Ring & Corporate Area'
-       ORDER BY p.pitchId`,
+        COALESCE(cfp.corporatestatus, 'Not Applying') AS corporatestatus
+       FROM pitch p
+       JOIN users u ON u.permitno = p.ownerpermitno
+       JOIN fixture f ON f.racecourseid = p.racecourseid
+       JOIN racecourse r ON r.racecourseid = f.racecourseid
+       LEFT JOIN corporatefixturepitch cfp
+              ON cfp.pitchid = p.pitchid AND cfp.fixtureid = f.fixtureid
+       WHERE f.fixtureid = $1 AND u.name !='Vacant' AND cfp.location ='Main Ring & Corporate Area'
+       ORDER BY p.pitchid`,
       [fixtureId]
     );
     const results = result.rows;
@@ -732,7 +732,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         try {
             // Get fixture date
             const fixture = await db.query(
-                `SELECT fixtureDate FROM Fixture WHERE fixtureId = $1`,
+                `SELECT fixturedate FROM fixture WHERE fixtureid = $1`,
                 [fixtureId]
             );
             const fixtureRows = fixture.rows;
@@ -754,9 +754,9 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
 
              // Insert new row if not exists, else update
             await db.query(
-                `INSERT INTO corporateFixturePitch (fixtureId, pitchId, racecourseId, location)
+                `INSERT INTO corporatefixturepitch (fixtureid, pitchid, racecourseid, location)
                 VALUES ($1, $2, $3, $4)
-                ON CONFLICT (fixtureId, pitchId, racecourseId)
+                ON CONFLICT (fixtureid, pitchid, racecourseid)
                 DO UPDATE SET location = EXCLUDED.location`,
                 [fixtureId, pitchId, racecourseId, location]
             );
@@ -777,14 +777,14 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
    
          try {
              const result = await db.query(
-             `SELECT f.fixtureId, 
-             CAST(f.fixtureDate AS DATE) AS fixtureDate,
-             r.racecourseId,
+             `SELECT f.fixtureid, 
+             CAST(f.fixturedate AS DATE) AS fixturedate,
+             r.racecourseid,
              r.name 
-             FROM Fixture f
-             JOIN Racecourse r ON f.racecourseId = r.racecourseId
-             WHERE f.fixtureDate >= CURRENT_DATE AND f.corporateAreaAvailable = TRUE
-             ORDER BY f.fixtureDate ASC`
+             FROM fixture f
+             JOIN racecourse r ON f.racecourseid = r.racecourseid
+             WHERE f.fixturedate >= CURRENT_DATE AND f.corporateareaavailable = TRUE
+             ORDER BY f.fixturedate ASC`
              );
 
          const results = result.rows;   
@@ -804,20 +804,20 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
                  const result = await db.query(
                 `SELECT
                     ca.id,
-                    CAST(f.fixtureDate AS DATE) AS fixtureDate, 
-                    r.racecourseId,
+                    CAST(f.fixturedate AS DATE) AS fixturedate, 
+                    r.racecourseid,
                     r.name AS racecourse,
-                    p.pitchLabel AS location,
-                    p.pitchNo,
+                    p.pitchlabel AS location,
+                    p.pitchno,
                     u.name
-                    FROM Pitch p
-                    JOIN Users u ON u.permitNo = p.ownerPermitNo
-                    JOIN Fixture f ON f.racecourseId = p.racecourseId
-                    JOIN Racecourse r ON r.racecourseId = f.racecourseId
-                    JOIN corporateAttendance ca
-                            ON ca.pitchId = p.pitchId AND ca.fixtureId = f.fixtureId            
-                    WHERE r.racecourseId = $1
-                    ORDER BY f.fixtureDate ASC`,
+                    FROM pitch p
+                    JOIN users u ON u.permitno = p.ownerpermitno
+                    JOIN fixture f ON f.racecourseid = p.racecourseid
+                    JOIN racecourse r ON r.racecourseid = f.racecourseid
+                    JOIN corporateattendance ca
+                            ON ca.pitchid = p.pitchid AND ca.fixtureid = f.fixtureid            
+                    WHERE r.racecourseid = $1
+                    ORDER BY f.fixturedate ASC`,
                     [racecourseId]
                 );
                 const results = result.rows;        
@@ -836,9 +836,9 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         try {
             const result = await db.query(`
 
-                SELECT racecourseId,
+                SELECT racecourseid,
                 name 
-                FROM Racecourse 
+                FROM racecourse 
                 ORDER BY name ASC`
             );
         
@@ -855,7 +855,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         const { fixtureDate, racecourseId } = req.body;
          try {
             await db.query(
-             `INSERT INTO Fixture (fixtureDate, racecourseId) VALUES ($1, $2)`,
+             `INSERT INTO fixture (fixturedate, racecourseid) VALUES ($1, $2)`,
              [fixtureDate, racecourseId]
              );
              res.json({ message: 'Fixture added successfully' });
@@ -869,7 +869,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
      router.delete('/:fixtureId', authenticateToken, authorizeRoles('admin'), async (req, res) => {
         const { fixtureId } = req.params;
             try {
-                await db.query(`DELETE FROM Fixture WHERE fixtureId = $1`, [fixtureId]);
+                await db.query(`DELETE FROM fixture WHERE fixtureid = $1`, [fixtureId]);
                 res.json({ message: 'Fixture deleted successfully' });
             } catch (err) {
                 console.error(err);
@@ -888,13 +888,13 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         try {
             // First delete existing attendees for this fixture
             await db.query(
-                `DELETE FROM corporateAttendance WHERE fixtureId = $1`,
+                `DELETE FROM corporateattendance WHERE fixtureid = $1`,
                 [fixtureId]
                 );
               // Insert all attendees
             for (const a of attendees) {
             await db.query(
-                `INSERT INTO corporateAttendance (fixtureId, pitchId, bookmakerPermitNo, attendedAt)
+                `INSERT INTO corporateattendance (fixtureid, pitchid, bookmakerpermitno, attendedat)
                 VALUES ($1, $2, $3, NOW())`,
                 [fixtureId, a.pitchId, a.bookmakerPermitNo]
             );
@@ -920,9 +920,9 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
             // Get fixture date
             const fixture = await db.query(
                 `SELECT *
-                    FROM Fixture f
-                    JOIN Racecourse r ON r.racecourseId = f.racecourseId
-                    WHERE f.fixtureId = $1`,
+                    FROM fixture f
+                    JOIN racecourse r ON r.racecourseid = f.racecourseid
+                    WHERE f.fixtureid = $1`,
                 [fixtureId]
             );
             const fixtureRows = fixture.rows;
@@ -933,9 +933,9 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
             // Insert new row if not exists, else update
              await db.query(
                 `UPDATE fixture 
-                 SET corporateAreaAvailable = $1
+                 SET corporateareaavailable = $1
                  
-                 WHERE fixtureId = $2`,
+                 WHERE fixtureid = $2`,
                 [corporateAreaAvailable, fixtureId ]
             );
             
@@ -957,9 +957,9 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
             // Get fixture date
             const fixture = await db.query(
                 `SELECT *
-                    FROM Fixture f
-                    JOIN Racecourse r ON r.racecourseId = f.racecourseId
-                    WHERE f.fixtureId = $1`,
+                    FROM fixture f
+                    JOIN racecourse r ON r.racecourseid = f.racecourseid
+                    WHERE f.fixtureid = $1`,
                 [fixtureId]
             );
             const fixtureRows = fixture.rows;
@@ -970,9 +970,9 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
             // Insert new row if not exists, else update
              await db.query(
                 `UPDATE fixture 
-                 SET numberOfcorporatePitches = $1
-                 WHERE fixtureId = $2`,
-                [numberOfcorporatePitches, fixtureId ]
+                 SET numberofcorporatepitches = $2
+                 WHERE fixtureId = $1`,
+                [fixtureId , numberOfcorporatePitches]
             );
             
             res.json({message: `Corporate Area Avaiable updated to '${numberOfcorporatePitches}' in Fixture ${fixtureId}` });

@@ -65,11 +65,11 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
         
         try {
             const result = await db.query(
-            `SELECT permitNo,
+            `SELECT permitno,
             name
-            FROM USERS
+            FROM users
             WHERE role_id = 1
-            ORDER BY permitNo ASC`
+            ORDER BY permitno ASC`
             );
 
         const results = result.rows;
@@ -87,7 +87,7 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
         const { permitNo, name } = req.body;
          try {
             await db.query(
-             `INSERT INTO USERS (permitNo, name) VALUES ($1, $2)`,
+             `INSERT INTO users (permitno, name) VALUES ($1, $2)`,
              [permitNo, name]
              );
              res.json({ message: 'Bookmaker added successfully' });
@@ -101,7 +101,7 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
      router.delete('/bookmakers/:permitNo', authenticateToken, authorizeRoles('admin'), async (req, res) => {
         const { permitNo } = req.params;
             try {
-                await db.query(`DELETE FROM Users WHERE permitNo = $1`, [permitNo]);
+                await db.query(`DELETE FROM users WHERE permitno = $1`, [permitNo]);
                 res.json({ message: 'User deleted successfully' });
             } catch (err) {
                 console.error(err);

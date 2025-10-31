@@ -434,7 +434,7 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
                 ON p.racecourseId = r.racecourseId	
                 JOIN fixture f	
                 ON r.racecourseid = f.racecourseid 
-                LEFT JOIN fixturepitchstatus fps	
+                LEFT JOIN fixturepitch fps	
                 ON fps.fixtureid = f.fixtureid	
                 AND fps.pitchid = p.pitchid	
                 AND fps.permitno = u.permitno 
@@ -442,7 +442,7 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
                 ORDER BY f.fixturedate`,	
                 [permitNo]	
                 );	
-                // Left Join with FixturePitchStatus ensures we always see a row, even if no status has been set yet.
+                // Left Join with FixturePitch ensures we always see a row, even if no status has been set yet.
 
         const results = result.rows;
         res.json(results);
@@ -483,7 +483,7 @@ router.put('/my-pitches/:fixtureId/:pitchId/status',authenticateToken,authorizeR
                 return res.status(404).json({ error: 'Fixture or pitch not found for this bookmaker' });
             }
 
-            const fixtureDate = new Date(fixtureRows[0].fixtureDate);
+            const fixtureDate = new Date(fixtureRows[0].fixturedate);
             const now = new Date();
 
             // Time rules
@@ -527,9 +527,9 @@ router.put('/my-pitches/:fixtureId/:pitchId/status',authenticateToken,authorizeR
                 // Update existing
                 await db.query(
                     `UPDATE fixturepitch
-                     SET status = $1, updatedat = now()
-                     WHERE fixtureid = $2 AND pitchid = $3`,
-                    [status, fixtureId, pitchId]
+                     SET status = $3, updatedat = now()
+                     WHERE fixtureid = $1 AND pitchid = $2`,
+                    [fixtureId, pitchId, status]
                 );
             }
 

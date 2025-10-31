@@ -112,9 +112,9 @@ router.get('/racecourses',authenticateToken,authorizeRoles('admin'),async (req, 
         try {
             const result = await db.query(`
 
-                SELECT racecourseId,
+                SELECT racecourseid,
                 name 
-                FROM Racecourse 
+                FROM racecourse 
                 ORDER BY name ASC`
             );
 
@@ -133,14 +133,14 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
     try {
             const result = await db.query(`
 
-            SELECT p.pitchId,
+            SELECT p.pitchid,
             u.name, 
-            CAST(p.seniorityDate AS DATE) AS seniority,
-            p.pitchLabel,
-            p.pitchNo
-            FROM Pitch p
-            JOIN Users u ON p.ownerPermitNo = u.permitNo
-            WHERE racecourseId = $1`, [racecourseId]
+            CAST(p.senioritydate AS DATE) AS seniority,
+            p.pitchlabel,
+            p.pitchno
+            FROM pitch p
+            JOIN users u ON p.ownerpermitno = u.permitno
+            WHERE racecourseid = $1`, [racecourseId]
            
             );
           
@@ -165,26 +165,26 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
 
                 // Get current owner first
                 const currentResult = await db.query(
-                "SELECT ownerPermitNo FROM Pitch WHERE pitchId = $1",
+                "SELECT ownerpermitno FROM pitch WHERE pitchid = $1",
                 [pitchId]
                 );
                 const current = currentResult.rows;
                 if (current.length === 0) {
                 return res.status(404).json({ error: "Pitch not found" });
                 }
-                const oldOwnerPermitNo = current[0].ownerPermitNo;
+                const oldOwnerPermitNo = current[0].ownerpermitno;
 
                 // Update pitch owner
                 await db.query(`
-                    UPDATE Pitch 
-                    SET ownerPermitNo = $1
-                    WHERE pitchId = $2`, 
-                    [newOwnerPermitNo, pitchId]);
+                    UPDATE pitch 
+                    SET ownerpermitno = $2
+                    WHERE pitchid = $1`, 
+                    [pitchId, newOwnerPermitNo ]);
 
                 // Log transfer
                 await db.query(`
-                    INSERT INTO PitchTransfer 
-                    (pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue) VALUES ($1, $2, $3, $4)`,
+                    INSERT INTO pitchtransfer 
+                    (pitchid, oldownerpermitno, newownerpermitno, transfervalue) VALUES ($1, $2, $3, $4)`,
                     [pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue ?? null]
                     );
 
