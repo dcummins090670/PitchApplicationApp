@@ -12,7 +12,8 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
     try {
         const [results] = await db.query (
             `SELECT 	
-                f.fixtureId,	
+                f.fixtureId,
+                p.pitchId,	
                 CAST(f.fixtureDate AS DATE) AS fixtureDate,
                 r.name AS racecourseName,	
 	            p.pitchLabel,	
@@ -419,7 +420,8 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
     try {
         const result = await db.query (
             `SELECT 	
-                f.fixtureid,	
+                f.fixtureid,
+                p.pitchid,	
                 CAST(f.fixturedate AS DATE) AS fixturedate,
                 r.name AS racecoursename,	
 	            p.pitchlabel,	
