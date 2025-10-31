@@ -4,13 +4,13 @@ function AdminBookmakerPage() {
   const [bookmakers, setBookmakers] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
   // Fetch bookmakers
   const fetchBookmakers = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/users/bookmakers", 
+      const response = await fetch(`${API_BASE_URL}/api/users/bookmakers`, 
         {headers: {Authorization: `Bearer ${token}` }  }
       );
 
@@ -62,8 +62,7 @@ function AdminBookmakerPage() {
   const handleDeleteBookmaker = async (permitNo) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5000/api/users/bookmakers/${permitNo}`,
+      const response = await fetch(`${API_BASE_URL}/api/users/bookmakers/${permitNo}`,
         {
           method: "DELETE",
           headers: {

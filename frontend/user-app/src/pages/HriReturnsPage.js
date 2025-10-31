@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-//import { Button } from "@/components/ui/button";
+
 
 function HriReturns({token}) {
 
   const [fixtures, setFixtures] = useState([]);
   const [selectedFixture, setSelectedFixture] = useState(null);
-  //const [pitches, setPitches] = useState([]);
-  //const [loading, setLoading] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   const [values, setValues] = useState({
     euroTotalStakeAway: 0,
@@ -38,7 +37,7 @@ function HriReturns({token}) {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/fixtures/upcoming",        
+        const response = await fetch(`${API_BASE_URL}/api/fixtures/upcoming`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -102,7 +101,7 @@ function HriReturns({token}) {
     };
 
     try {
-     const response = await fetch("http://localhost:5000/api/hriReturns", {
+     const response = await fetch(`${API_BASE_URL}/api/hriReturns`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

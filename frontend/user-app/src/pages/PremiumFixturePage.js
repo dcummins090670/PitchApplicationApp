@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 
 function PremiumFixturesPage() {
   const [fixtures, setFixtures] = useState([]);
-  //const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/premiumFixtures/upcoming",        
+        const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/upcoming`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ function PremiumFixturesPage() {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/premiumFixtures/${fixtureId}/premium-pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${fixtureId}/premium-pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
 

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 
 function AttendeesPage() {
   const [fixtures, setFixtures] = useState([]);
-  //const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
  
   // Fetch racecourses
     useEffect(() => {
        const fetchFixtures = async () => {
          try {
            const token = localStorage.getItem("token");
-           const response = await fetch("http://localhost:5000/api/fixtures/currentyear",        
+           const response = await fetch(`${API_BASE_URL}/api/fixtures/currentyear`,        
            {    
              headers: {
                Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ function AttendeesPage() {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/fixtures/${fixtureId}/attended-pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}/attended-pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
 

@@ -7,13 +7,14 @@ function AdminFixturePage() {
   const [racecourseId, setRacecourseId] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
+  
   // Fetch fixtures
   const fetchFixtures = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/fixtures", 
+      const response = await fetch(`${API_BASE_URL}/api/fixtures`, 
         {headers: {Authorization: `Bearer ${token}` }  }
       );
 
@@ -31,7 +32,7 @@ function AdminFixturePage() {
   const fetchRacecourses = async () => {
     try {
       const token = localStorage.getItem("token");
-     const response = await fetch("http://localhost:5000/api/fixtures/racecourses", 
+     const response = await fetch(`${API_BASE_URL}/api/fixtures/racecourses`, 
           { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -48,7 +49,7 @@ function AdminFixturePage() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/fixtures", 
+      const response = await fetch(`${API_BASE_URL}/api/fixtures`, 
         {         
         method: "POST",
         headers: {
@@ -79,8 +80,7 @@ function AdminFixturePage() {
   const handleDeleteFixture = async (fixtureId) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5000/api/fixtures/${fixtureId}`,
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}`,
         {
           method: "DELETE",
           headers: {

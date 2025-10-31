@@ -3,6 +3,7 @@ function RegistrationPage() {
 
   const [formData, setFormData] = useState({permitNo: "",name: "",phone: "",email: "",password: "",role_id: "",});
   const [message, setMessage] = useState("");
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   // Handle input changes
   const handleChange = (e) => {
@@ -14,7 +15,7 @@ function RegistrationPage() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -8,13 +8,13 @@ function PremiumAttendancePage() {
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   useEffect(() => {
     const fetchPremiumFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/premiumFixtures",        
+        const response = await fetch(`${API_BASE_URL}/api/premiumFixtures`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ function PremiumAttendancePage() {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/premiumFixtures/${fixtureId}/premium-pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${fixtureId}/premium-pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response.ok) throw new Error("Failed to fetch pitches");
@@ -70,7 +70,7 @@ function PremiumAttendancePage() {
   const handlePremiumAttendance = async (fixtureId, pitchId, racecourseId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/premiumFixtures/${fixtureId}/${pitchId}/${racecourseId}/attendance`,        
+      const response = await ffetch(`${API_BASE_URL}/api/premiumFixtures/${fixtureId}/${pitchId}/${racecourseId}/attendance`,        
         {
           method: "PUT",
           headers: {
@@ -135,8 +135,7 @@ function PremiumAttendancePage() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5000/api/premiumFixtures/${selectedFixture}/attendance-list`,
+      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${selectedFixture}/attendance-list`,
         {
           method: "POST",
           headers: {

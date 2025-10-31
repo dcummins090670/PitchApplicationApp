@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-//import { Link } from "react-router-dom";
 
 function CorporatePitchPage() {
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
   
   useEffect(() => {
     const fetchCorporateFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/corporateFixtures/my-corporate-pitches", {
+        const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/my-corporate-pitches`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -34,7 +33,7 @@ function CorporatePitchPage() {
   const handleCorporateStatusChange = async (fixtureId, pitchId, racecourseId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/corporateFixtures/my-corporate-pitches/${fixtureId}/${pitchId}/${racecourseId}/corporate-status`,        
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/my-corporate-pitches/${fixtureId}/${pitchId}/${racecourseId}/corporate-status`,        
         {
           method: "PUT",
           headers: {

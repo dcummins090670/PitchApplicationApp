@@ -5,12 +5,13 @@ function AttendancePage() {
   const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/fixtures/upcoming",        
+        const response = await fetch(`${API_BASE_URL}/api/fixtures/upcoming`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -46,7 +47,7 @@ function AttendancePage() {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/fixtures/${fixtureId}/pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}/pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -65,7 +66,7 @@ function AttendancePage() {
   const handleAttendance = async (fixtureId, pitchId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/fixtures/${fixtureId}/${pitchId}/attendance`,        
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}/${pitchId}/attendance`,        
         {
           method: "PUT",
           headers: {
@@ -130,8 +131,7 @@ function AttendancePage() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5000/api/fixtures/${selectedFixture}/attendance-list`,
+      const response = await fetch(`${API_BASE_URL}/api/fixtures/${selectedFixture}/attendance-list`,
         {
           method: "POST",
           headers: {

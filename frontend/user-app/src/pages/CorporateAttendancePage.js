@@ -8,13 +8,13 @@ function CorporateAttendancePage() {
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
   
-
   useEffect(() => {
     const fetchCorporateFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/corporateFixtures",        
+        const response = await fetch(`${API_BASE_URL}/api/corporateFixtures`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ function CorporateAttendancePage() {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/corporateFixtures/${fixtureId}/corporate-pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/${fixtureId}/corporate-pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response.ok) throw new Error("Failed to fetch pitches");
@@ -70,7 +70,7 @@ function CorporateAttendancePage() {
   const handleCorporateAttendance = async (fixtureId, pitchId, racecourseId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/corporateFixtures/${fixtureId}/${pitchId}/${racecourseId}/attendance`,        
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/${fixtureId}/${pitchId}/${racecourseId}/attendance`,        
         {
           method: "PUT",
           headers: {
@@ -135,8 +135,7 @@ function CorporateAttendancePage() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5000/api/corporateFixtures/${selectedFixture}/attendance-list`,
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/${selectedFixture}/attendance-list`,
         {
           method: "POST",
           headers: {

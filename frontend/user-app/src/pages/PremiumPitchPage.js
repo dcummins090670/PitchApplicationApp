@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-//import { Link } from "react-router-dom";
 
 function PremiumPitchPage() {
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
   
   useEffect(() => {
     const fetchPremiumFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/premiumFixtures/my-premium-pitches", {
+        const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/my-premium-pitches`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -34,7 +33,7 @@ function PremiumPitchPage() {
   const handlePremiumStatusChange = async (fixtureId, pitchId, racecourseId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/premiumFixtures/my-premium-pitches/${fixtureId}/${pitchId}/${racecourseId}/premium-status`,        
+      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/my-premium-pitches/${fixtureId}/${pitchId}/${racecourseId}/premium-status`,        
         {
           method: "PUT",
           headers: {

@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 
 function AdminCorporatePage() {
   const [fixtures, setFixtures] = useState([]);
-  //const [selectedFixture, setSelectedFixture] = useState("");
-  //const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/fixtures/upcoming",        
+        const response = await fetch(`${API_BASE_URL}/api/fixtures/upcoming`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -34,7 +33,7 @@ function AdminCorporatePage() {
    const handleCorporateArea = async (fixtureId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/corporateFixtures/${fixtureId}/corporateArea`,        
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/${fixtureId}/corporateArea`,        
         {
           method: "PUT",
           headers: {

@@ -4,13 +4,14 @@ function PremiumAttendeesPage() {
   const [racecourses, setRacecourses] = useState([]);
   const [attendees, setAttendees] = useState([]);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
  
   // Fetch racecourses
     useEffect(() => {
     const fetchRacecourses = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:5000/api/premiumFixtures/racecourses", 
+            const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/racecourses`, 
             { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response.ok) throw new Error("Failed to fetch racecourses");
@@ -40,7 +41,7 @@ function PremiumAttendeesPage() {
     try {
       
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/premiumFixtures/${racecourseId}/attendance-list`, 
+      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${racecourseId}/attendance-list`, 
           { headers: { Authorization: `Bearer ${token}` } }
       );
 

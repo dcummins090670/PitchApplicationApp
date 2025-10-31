@@ -9,13 +9,14 @@ function AdminPitchPage() {
   const [message] = useState("");
   const [selectedOwners, setSelectedOwners] = useState({});   // { [pitchId]: permitNo }
   const [transferValues, setTransferValues] = useState({});   // { [pitchId]: "123.45" }
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
+  
   // Fetch racecourses
   const fetchRacecourses = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/pitches/racecourses", {
+      const response = await fetch(`${API_BASE_URL}/api/pitches/racecourses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -34,7 +35,7 @@ function AdminPitchPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/pitches/${racecourseId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/pitches/${racecourseId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -52,7 +53,7 @@ function AdminPitchPage() {
   const fetchBookmakers = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/users/bookmakers", {
+      const response = await fetch(`${API_BASE_URL}/api/users/bookmakers`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -99,8 +100,7 @@ function AdminPitchPage() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5000/api/pitches/${pitchId}/transfer`,
+      const response = await fetch(`${API_BASE_URL}/api/pitches/${pitchId}/transfer`,
         {
           method: "PUT",
           headers: {
