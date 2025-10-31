@@ -454,7 +454,7 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
 });
 
 // PostgreSQL: Update pitch status for a fixture - when bookmker select a meeting to indicate status - "Working/Not Working)"
-router.put('/my-pitches/:fixtureid/:pitchid/status',authenticateToken,authorizeRoles('bookmaker' ), async (req, res) => {
+router.put('/my-pitches/:fixtureId/:pitchId/status',authenticateToken,authorizeRoles('bookmaker' ), async (req, res) => {
         const { fixtureId, pitchId } = req.params;
         const { status } = req.body;
         const permitNo = req.user.permitNo; // from JWT
@@ -594,7 +594,7 @@ router.get('/upcoming', async (req, res) => {
 );
 
 // Get attended pitches for a specific fixture
-router.get('/:fixtureid/pitches', async (req, res) => {
+router.get('/:fixtureId/pitches', async (req, res) => {
   const { fixtureId } = req.params;
 
   try {
@@ -628,7 +628,7 @@ router.get('/:fixtureid/pitches', async (req, res) => {
 });
 
 // Get attended pitches for a specific fixture
-router.get('/:fixtureid/attended-pitches', async (req, res) => {
+router.get('/:fixtureId/attended-pitches', async (req, res) => {
   const { fixtureId } = req.params;
 
   try {
@@ -664,7 +664,7 @@ router.get('/:fixtureid/attended-pitches', async (req, res) => {
 });
 
 // Update pitch attendance for a fixture (SIS/Admin only)
-router.put('/:fixtureid/:pitchid/attendance',authenticateToken,authorizeRoles('sis', 'admin'),async (req, res) => {
+router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('sis', 'admin'),async (req, res) => {
         const { fixtureId, pitchId } = req.params;
         const { attendance } = req.body;      
     
@@ -781,7 +781,7 @@ router.put('/:fixtureid/:pitchid/attendance',authenticateToken,authorizeRoles('s
     });
 
     // Delete fixture
-     router.delete('/:fixtureid', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+     router.delete('/:fixtureId', authenticateToken, authorizeRoles('admin'), async (req, res) => {
         const { fixtureId } = req.params;
             try {
                 await db.query(`DELETE FROM fixture WHERE fixtureid = $1`, [fixtureId]);
@@ -792,7 +792,7 @@ router.put('/:fixtureid/:pitchid/attendance',authenticateToken,authorizeRoles('s
             }
         });
 
-     router.post("/:fixtureid/attendance-list", async (req, res) => {
+     router.post("/:fixtureId/attendance-list", async (req, res) => {
         const { fixtureId } = req.params;
         const { attendees } = req.body;
 
