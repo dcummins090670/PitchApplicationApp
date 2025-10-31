@@ -81,11 +81,11 @@ app.get('/api/user', (req, res) => {
 const { authenticateToken, authorizeRoles } = require('./middleware/authMiddleware');
 
 app.get('/secret', authenticateToken, authorizeRoles('admin'), (req, res) => {
-    res.json({ message: `Welcome Admin ${req.user.permitNo}, you made it!` });
+    res.json({ message: `Welcome Admin ${req.user.permitno}, you made it!` });
 });
 
 app.get('/bookie', authenticateToken, authorizeRoles('bookmaker'), (req, res) => {
-    res.json({ message: `Welcome Bookie ${req.user.permitNo}, you made it!` });
+    res.json({ message: `Welcome Bookie ${req.user.permitno}, you made it!` });
 });
 
 

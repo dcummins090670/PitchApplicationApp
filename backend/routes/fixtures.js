@@ -414,7 +414,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
 // 
 // PostgreSQL: Get fixtures + pitches for the logged-in bookmaker
 router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {    
-    const permitNo = req.user.permitNo; // from JWT
+    const permitNo = req.user.permitno; // from JWT
 
     try {
         const result = await db.query (
@@ -457,7 +457,7 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
 router.put('/my-pitches/:fixtureid/:pitchid/status',authenticateToken,authorizeRoles('bookmaker' ), async (req, res) => {
         const { fixtureId, pitchId } = req.params;
         const { status } = req.body;
-        const permitNo = req.user.permitNo; // from JWT
+        const permitNo = req.user.permitno; // from JWT
 
         const validStatuses = ['Not Working', 'Applied'];
         if (!validStatuses.includes(status)) {
