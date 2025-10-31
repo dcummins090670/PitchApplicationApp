@@ -70,7 +70,7 @@ function PremiumAttendancePage() {
   const handlePremiumAttendance = async (fixtureId, pitchId, racecourseId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await ffetch(`${API_BASE_URL}/api/premiumFixtures/${fixtureId}/${pitchId}/${racecourseId}/attendance`,        
+      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${fixtureId}/${pitchId}/${racecourseId}/attendance`,        
         {
           method: "PUT",
           headers: {
