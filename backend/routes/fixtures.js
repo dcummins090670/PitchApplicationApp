@@ -510,11 +510,12 @@ router.put('/my-pitches/:fixtureId/:pitchId/status',authenticateToken,authorizeR
             }
 
             // Ensure FixturePitchStatus record exists
-            const existingResult = await db.query(
+            const existingPitch = await db.query(
                 `SELECT * FROM fixturepitch WHERE fixtureid = $1 AND pitchid = $2`,
                 [fixtureId, pitchId]
             );
 
+            const existing = existingPitch.rows;
             if (existing.length === 0) {
                 // Create it if not found
                 await db.query(
