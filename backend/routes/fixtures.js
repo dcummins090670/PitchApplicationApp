@@ -682,7 +682,8 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
             await db.query(
                 `INSERT INTO fixturepitch (fixtureid, pitchid, attendance)
                 VALUES ($1, $2, $3)
-                ON DUPLICATE KEY UPDATE attendance = VALUES(attendance)`,
+                ON CONFLICT (fixtureid, pitchid)
+                DO UPDATE SET attendance = EXCLUDED.attendance`,
                 [fixtureId, pitchId, attendance]
             );
             
