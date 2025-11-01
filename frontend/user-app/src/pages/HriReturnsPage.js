@@ -58,7 +58,7 @@ function HriReturns({token}) {
     
    const handleFixtureChange = async (e) => {
     const fixtureId = e.target.value;
-    const fixture = fixtures.find((f) => f.fixtureId.toString() === fixtureId);
+    const fixture = fixtures.find((f) => f.fixtureid.toString() === fixtureId);
     setSelectedFixture(fixture || null);
     // if (fixtureId) {
     //  await fetchHriReturns(fixtureId);

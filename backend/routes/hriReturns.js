@@ -57,8 +57,8 @@ router.post("/", authenticateToken, authorizeRoles ('bookmaker'), async (req, re
    
     // insert return row
     await db.query(
-      `INSERT INTO BookmakerReturn
-      (fixtureid,permitno,eurototalstakeaway,eurotracklaidoffaway,eurototalvoidaway,eurototalstakehome,eurotrackaidoffhome,eurototalvoidhome,stgtotalstakeaway,stgtracklaidoffaway,stgtotalvoidaway,stgtotalstakehome,stgtracklaidoffhome,stgtotalvoidhome,exchangelaid,exchangebacked, createdat, updatedat)
+      `INSERT INTO bookmakerreturn
+      (fixtureid,permitno,eurototalstakeaway,eurotracklaidoffaway,eurototalvoidaway,eurototalstakehome,eurotracklaidoffhome,eurototalvoidhome,stgtotalstakeaway,stgtracklaidoffaway,stgtotalvoidaway,stgtotalstakehome,stgtracklaidoffhome,stgtotalvoidhome,exchangelaid,exchangebacked, createdat, updatedat)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, Now(), Now())`,
       [
         fixtureId, 

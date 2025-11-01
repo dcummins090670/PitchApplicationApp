@@ -53,7 +53,7 @@ function PremiumPitchPage() {
         setFixtures((prevFixtures) =>
           prevFixtures.map((fixture) =>
             fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
-              ? { ...fixture, premiumStatus: oldStatus }
+              ? { ...fixture, premiumstatus: oldStatus }
               : fixture
           )
         );
@@ -65,7 +65,7 @@ function PremiumPitchPage() {
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
           fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
-            ? { ...fixture, premiumStatus: newStatus }
+            ? { ...fixture, premiumstatus: newStatus }
             : fixture
         )
       );

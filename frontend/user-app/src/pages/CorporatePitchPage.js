@@ -53,7 +53,7 @@ function CorporatePitchPage() {
         setFixtures((prevFixtures) =>
           prevFixtures.map((fixture) =>
             fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
-              ? { ...fixture, corporateStatus: oldStatus }
+              ? { ...fixture, corporatestatus: oldStatus }
               : fixture
           )
         );
@@ -65,7 +65,7 @@ function CorporatePitchPage() {
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
           fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
-            ? { ...fixture, corporateStatus: newStatus }
+            ? { ...fixture, corporatestatus: newStatus }
             : fixture
         )
       );

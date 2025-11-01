@@ -8,13 +8,33 @@ const mysql  = require('mysql2');
 //const users = require('./user');
 const db = require('./config/db');
 
+const allowedOrigins = [
+  "http://localhost:3000", // Local dev
+  "https://pitchapplicationapp.onrender.com", // Render frontend
+];
+
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  // Handle preflight (OPTIONS) requests immediately
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
 
 app.use(cors({
-  origin: [
-    "http://localhost:3000",                     // local dev
-    "https://pitchapplicationapp.onrender.com"  // deployed frontend
-  ],
-  credentials: true
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }));
 
 app.use(express.json());
@@ -81,11 +101,11 @@ app.get('/api/user', (req, res) => {
 const { authenticateToken, authorizeRoles } = require('./middleware/authMiddleware');
 
 app.get('/secret', authenticateToken, authorizeRoles('admin'), (req, res) => {
-    res.json({ message: `Welcome Admin ${req.user.permitno}, you made it!` });
+    res.json({ message: `Welcome Admin ${req.user.permitNo}, you made it!` });
 });
 
 app.get('/bookie', authenticateToken, authorizeRoles('bookmaker'), (req, res) => {
-    res.json({ message: `Welcome Bookie ${req.user.permitno}, you made it!` });
+    res.json({ message: `Welcome Bookie ${req.user.permitNo}, you made it!` });
 });
 
 
