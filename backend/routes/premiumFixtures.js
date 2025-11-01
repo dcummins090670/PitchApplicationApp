@@ -512,7 +512,7 @@ router.get('/my-premium-pitches', authenticateToken, authorizeRoles('bookmaker')
                 p.pitchid,
                 p.pitchlabel,
                 p.pitchno,
-            COALESCE(pfp.premiumstatus 'Not Applying') AS premiumstatus   
+            COALESCE(pfp.premiumstatus, 'Not Applying') AS premiumstatus   
             FROM users u
             JOIN pitch p 
                 ON u.permitno = p.ownerpermitno
@@ -533,7 +533,7 @@ router.get('/my-premium-pitches', authenticateToken, authorizeRoles('bookmaker')
         res.json(results);
 
     } catch (err) {
-        console.error(err);
+        console.error("Error fetching premium pitches:", err);
         res.status(500).json({error:err.message});
     }    
 

@@ -509,7 +509,7 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
                 p.pitchid,
                 p.pitchlabel,
                 p.pitchno,
-            COALESCE(cfp.corporatestatus 'Not Applying') AS corporatestatus   
+            COALESCE(cfp.corporatestatus, 'Not Applying') AS corporatestatus   
             FROM users u
             JOIN pitch p 
                 ON u.permitno = p.ownerpermitno
@@ -530,7 +530,7 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
         res.json(results);
 
     } catch (err) {
-        console.error(err);
+        console.error("Error fetching premium pitches:", err);
         res.status(500).json({error:err.message});
     }    
 
@@ -590,7 +590,7 @@ router.put('/my-corporate-pitches/:fixtureId/:pitchId/:racecourseId/corporate-st
 
             // Ensure FixturePitchStatus record exists
             const result = await db.query(
-                `SELECT * FROM corporatefixturePitch WHERE fixtureid = $1 AND pitchid = $2 AND racecourseid = $3`,
+                `SELECT * FROM corporatefixturepitch WHERE fixtureid = $1 AND pitchid = $2 AND racecourseid = $3`,
                 [fixtureId, pitchId, racecourseId]
             );
             const existing = result.rows;
