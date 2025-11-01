@@ -681,7 +681,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
              // Insert new row if not exists, else update
             await db.query(
                 `INSERT INTO fixturepitch (fixtureid, pitchid, attendance)
-                VALUES (?, ?, ?)
+                VALUES ($1, $2, $3)
                 ON DUPLICATE KEY UPDATE attendance = VALUES(attendance)`,
                 [fixtureId, pitchId, attendance]
             );
@@ -716,7 +716,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
         }
     });
 
-        router.get("/:racecourseid/attendance-list", async (req, res) => {
+        router.get("/:racecourseId/attendance-list", async (req, res) => {
               const { racecourseId } = req.params;  
                 try {
                      // Get all attendees for a particular fixture (Note pa.id is used for the unique key in attendees)

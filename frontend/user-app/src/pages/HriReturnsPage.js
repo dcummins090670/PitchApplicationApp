@@ -160,8 +160,8 @@ function HriReturns({token}) {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureId} value={f.fixtureId}>
-            {f.fixtureDate} – {f.name}
+          <option key={f.fixtureid} value={f.fixtureid}>
+            {f.fixturedate} – {f.name}
           </option>
         ))}
     </select>
