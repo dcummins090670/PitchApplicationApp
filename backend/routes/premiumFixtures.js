@@ -512,13 +512,13 @@ router.get('/my-premium-pitches', authenticateToken, authorizeRoles('bookmaker')
                 p.pitchid,
                 p.pitchlabel,
                 p.pitchno,
-            COALESCE(pfp.premiumstatus, 'Not Applying') AS premiumstatus   
+            COALESCE(pfp.premiumstatus 'Not Applying') AS premiumstatus   
             FROM users u
             JOIN pitch p 
                 ON u.permitno = p.ownerpermitno
             JOIN racecourse r 
                 ON p.racecourseid = r.racecourseid
-            JOIN Fixture f
+            JOIN fixture f
                 ON r.racecourseid = f.racecourseid                
             LEFT JOIN premiumfixturepitch pfp
                 ON pfp.fixtureid = f.fixtureid
@@ -539,7 +539,7 @@ router.get('/my-premium-pitches', authenticateToken, authorizeRoles('bookmaker')
 
 });
 
-// Update pitch status for a fixture (Bookmaker version with time rules) - Used when bookmker select a meeting to indicate status - "Working/Not Working)"
+// Update pitch status for a fixture (Bookmaker version with time rules) - Used when bookmker select a meeting to indicate status - "Applying/Not Applying)"
 router.put('/my-premium-pitches/:fixtureId/:pitchId/:racecourseId/premium-status',authenticateToken,authorizeRoles('bookmaker'),async (req, res) => {
         const { fixtureId, pitchId, racecourseId } = req.params;
         const { premiumStatus } = req.body;

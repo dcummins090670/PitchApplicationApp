@@ -109,7 +109,7 @@ function PremiumPitchPage() {
                 <td className="border px-2 sm:px-4 py-2">{fixture.pitchlabel}</td>
                 <td className="border px-2 sm:px-4 py-2">{fixture.pitchno}</td>
                 <td className="border px-2 sm:px-4 py-2"> 
-                    <select value={fixture.premiumStatus || ""}
+                    <select value={fixture.premiumstatus || ""}
                       onChange={(e) => handlePremiumStatusChange(
                           fixture.fixtureid,
                           fixture.pitchid,

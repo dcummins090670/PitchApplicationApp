@@ -509,13 +509,13 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
                 p.pitchid,
                 p.pitchlabel,
                 p.pitchno,
-            COALESCE(cfp.corporatestatus, 'Not Applying') AS corporatestatus   
+            COALESCE(cfp.corporatestatus 'Not Applying') AS corporatestatus   
             FROM users u
             JOIN pitch p 
                 ON u.permitno = p.ownerpermitno
             JOIN racecourse r 
                 ON p.racecourseid = r.racecourseid
-            JOIN Fixture f
+            JOIN fixture f
                 ON r.racecourseid = f.racecourseid                
             LEFT JOIN corporatefixturepitch cfp
                 ON cfp.fixtureid = f.fixtureid

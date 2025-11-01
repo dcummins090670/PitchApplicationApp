@@ -680,7 +680,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
      
              // Insert new row if not exists, else update
             await db.query(
-                `INSERT INTO FixturePitch (fixtureId, pitchId, attendance)
+                `INSERT INTO fixturepitch (fixtureid, pitchid, attendance)
                 VALUES (?, ?, ?)
                 ON DUPLICATE KEY UPDATE attendance = VALUES(attendance)`,
                 [fixtureId, pitchId, attendance]
