@@ -67,7 +67,7 @@ function CorporateAttendeesPage() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Racecourse --</option>
         {racecourses.map((r) => (
-          <option key={r.racecourseId} value={r.racecourseId}>
+          <option key={r.racecourseid} value={r.racecourseid}>
             {r.name}
           </option>
         ))}
@@ -93,10 +93,10 @@ function CorporateAttendeesPage() {
           <tbody>
             {attendees.map((a) => (
               <tr key={a.id} className="hover:bg-gray-50">
-                <td className="border px-2 sm:px-4 py-2">{a.fixtureDate}</td>
+                <td className="border px-2 sm:px-4 py-2">{a.fixturedate}</td>
                 <td className="border px-2 sm:px-4 py-2">{a.name}</td> 
                 <td className="border px-2 sm:px-4 py-2">{a.location}</td> 
-                <td className="border px-2 sm:px-4 py-2">{a.pitchNo}</td>               
+                <td className="border px-2 sm:px-4 py-2">{a.pitchno}</td>               
               </tr>
             ))}
           </tbody>

@@ -89,7 +89,7 @@ function CorporateAttendancePage() {
         // revert if it fails 
         setPitches((prevPitches) =>
           prevPitches.map((pitch) =>
-            pitch.pitchId === pitchId
+            pitch.pitchid === pitchId
               ? { ...pitch, location: oldStatus }
               : pitch
           )
@@ -101,7 +101,7 @@ function CorporateAttendancePage() {
       // update UI with new pitch location if successful
       setPitches((prevPitches) =>
         prevPitches.map((pitch) =>
-          pitch.pitchId === pitchId
+          pitch.pitchid === pitchId
             ? { ...pitch, location: newStatus }
             : pitch
         )
@@ -124,8 +124,8 @@ function CorporateAttendancePage() {
       const attendees = pitches
       .filter((p) => p.location === "Main Ring & Corporate Area")
       .map((p) => ({
-        pitchId: p.pitchId,
-        bookmakerPermitNo: p.permitNo, 
+        pitchId: p.pitchid,
+        bookmakerPermitNo: p.permitno, 
       }));
 
       if (attendees.length === 0) {
@@ -169,8 +169,8 @@ function CorporateAttendancePage() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureId} value={f.fixtureId}>
-            {f.fixtureDate} – {f.name}
+          <option key={f.fixtureid} value={f.fixtureid}>
+            {f.fixturedate} – {f.name}
           </option>
         ))}
       </select>
@@ -196,7 +196,7 @@ function CorporateAttendancePage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchId} className={`hover:bg-gray-100 ${
+                <tr key={p.pitchid} className={`hover:bg-gray-100 ${
                   p.location === "Main Ring & Corporate Area" ? "bg-red-100" : "bg-gray-300"
                   }`} // Change background colour of the row to red if fixture.status has applied to work in corporate area
                 >
@@ -213,8 +213,8 @@ function CorporateAttendancePage() {
                           const newValue = e.target.checked ? "Main Ring & Corporate Area" : "Main Ring";
                           handleCorporateAttendance(
                             selectedFixture,
-                            p.pitchId,
-                            p.racecourseId,
+                            p.pitchid,
+                            p.racecourseid,
                             newValue,
                             p.location // keep old value in case of API failure
                           );

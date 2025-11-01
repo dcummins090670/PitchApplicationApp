@@ -89,7 +89,7 @@ function PremiumAttendancePage() {
         // revert if it fails 
         setPitches((prevPitches) =>
           prevPitches.map((pitch) =>
-            pitch.pitchId === pitchId
+            pitch.pitchid === pitchId
               ? { ...pitch, location: oldStatus }
               : pitch
           )
@@ -101,7 +101,7 @@ function PremiumAttendancePage() {
       // update UI with new pitch location if successful
       setPitches((prevPitches) =>
         prevPitches.map((pitch) =>
-          pitch.pitchId === pitchId
+          pitch.pitchid === pitchId
             ? { ...pitch, location: newStatus }
             : pitch
         )
@@ -124,8 +124,8 @@ function PremiumAttendancePage() {
       const attendees = pitches
       .filter((p) => p.location === "Premium Area")
       .map((p) => ({
-        pitchId: p.pitchId,
-        bookmakerPermitNo: p.permitNo, 
+        pitchId: p.pitchid,
+        bookmakerPermitNo: p.permitno, 
       }));
 
       if (attendees.length === 0) {
@@ -169,8 +169,8 @@ function PremiumAttendancePage() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureId} value={f.fixtureId}>
-            {f.fixtureDate} – {f.name}
+          <option key={f.fixtureid} value={f.fixtureid}>
+            {f.fixturedate} – {f.name}
           </option>
         ))}
       </select>
@@ -196,14 +196,14 @@ function PremiumAttendancePage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchId} className={`hover:bg-gray-100 ${
+                <tr key={p.pitchid} className={`hover:bg-gray-100 ${
                   p.location === "Premium Area" ? "bg-orange-200" : "bg-gray-300"
                   }`} // Change background colour of the row to green if fixture.status has applied to work
                 >
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchLabel}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.bookmakerName}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchNo}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.premiumStatus}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.bookmakername}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitchno}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.premiumstatus}</td>
                   <td className="border px-2 sm:px-4 py-2">
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input
@@ -213,8 +213,8 @@ function PremiumAttendancePage() {
                           const newValue = e.target.checked ? "Premium Area" : "Main Ring";
                           handlePremiumAttendance(
                             selectedFixture,
-                            p.pitchId,
-                            p.racecourseId,
+                            p.pitchid,
+                            p.racecourseid,
                             newValue,
                             p.location // keep old value in case of API failure
                           );

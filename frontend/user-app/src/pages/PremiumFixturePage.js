@@ -75,8 +75,8 @@ function PremiumFixturesPage() {
          
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureId} value={f.fixtureId}>
-            {f.fixtureDate} – {f.name}
+          <option key={f.fixtureid} value={f.fixtureid}>
+            {f.fixturedate} – {f.name}
           </option>          
         ))}
         
@@ -101,7 +101,7 @@ function PremiumFixturesPage() {
                   {/* Total Pitches */}
                   <div className="bg-orange-400 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Premium Pitches Available</p>
-                    <p className="text-2xl">{fixtures.map((f)=> (f.numberOfPremiumPitches))}</p> 
+                    <p className="text-2xl">{fixtures.map((f)=> (f.numberofpremiumpitches))}</p> 
                   </div>
                   
 
@@ -109,7 +109,7 @@ function PremiumFixturesPage() {
                   <div className="bg-orange-700 text-blue-100 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Premium Pitch Applicants</p>
                     <p className="text-2xl">
-                      {pitches.filter((p) => p.premiumStatus === "Applied").length}
+                      {pitches.filter((p) => p.premiumstatus === "Applied").length}
                     </p>
                   </div>
 
@@ -120,8 +120,8 @@ function PremiumFixturesPage() {
                       {
                         new Set(
                           pitches
-                            .filter((p) => p.premiumStatus === "Applied")
-                            .map((p) => p.bookmakerName)
+                            .filter((p) => p.premiumstatus === "Applied")
+                            .map((p) => p.bookmakername)
                         ).size
                       }
                     </p>
@@ -141,14 +141,14 @@ function PremiumFixturesPage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchId} className={`hover:bg-red-100 ${
-                p.premiumStatus === "Applied" ? "bg-orange-200" : "bg-gray-300"
+                <tr key={p.pitchid} className={`hover:bg-red-100 ${
+                p.premiumstatus === "Applied" ? "bg-orange-200" : "bg-gray-300"
                 }`} // Change background colour of the row to green if fixture.status has applied to work
                 > 
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchLabel}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.bookmakerName}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchNo}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.premiumStatus}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.bookmakername}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitchno}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.premiumstatus}</td>
                 </tr>
               ))}
             </tbody>

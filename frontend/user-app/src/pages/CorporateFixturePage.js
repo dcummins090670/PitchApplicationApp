@@ -74,8 +74,8 @@ function CorporateFixturesPage() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureId} value={f.fixtureId}>
-            {f.fixtureDate} – {f.name}
+          <option key={f.fixtureid} value={f.fixtureid}>
+            {f.fixturedate} – {f.name}
           </option>
         ))}
       </select>
@@ -101,7 +101,7 @@ function CorporateFixturesPage() {
                   {/* Total Pitches */}
                   <div className="bg-red-300 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Corporate Pitches Available</p>
-                    <p className="text-2xl">{fixtures.map((f)=> (f.numberOfCorporatePitches))}</p> 
+                    <p className="text-2xl">{fixtures.map((f)=> (f.numberofcorporatepitches))}</p> 
                   </div>
                   
 
@@ -109,7 +109,7 @@ function CorporateFixturesPage() {
                   <div className="bg-red-700 text-blue-100 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Corporate Pitch Applicants</p>
                     <p className="text-2xl">
-                      {pitches.filter((p) => p.corporateStatus === "Applied").length}
+                      {pitches.filter((p) => p.corporatestatus === "Applied").length}
                     </p>
                   </div>
 
@@ -120,8 +120,8 @@ function CorporateFixturesPage() {
                       {
                         new Set(
                           pitches
-                            .filter((p) => p.corporateStatus === "Applied")
-                            .map((p) => p.bookmakerName)
+                            .filter((p) => p.corporatestatus === "Applied")
+                            .map((p) => p.bookmakername)
                         ).size
                       }
                     </p>
@@ -141,14 +141,14 @@ function CorporateFixturesPage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchId} className={`hover:bg-gray-50 ${
-                p.corporateStatus === "Applied" ? "bg-red-100" : "bg-gray-300"
+                <tr key={p.pitchid} className={`hover:bg-gray-50 ${
+                p.corporatestatus === "Applied" ? "bg-red-100" : "bg-gray-300"
                 }`} // Change background colour of the row to yellow if fixture.status has applied to work
                 > 
-                  <td className="border px-4 py-2">{p.pitchLabel}</td>
-                  <td className="border px-4 py-2">{p.bookmakerName}</td>
-                  <td className="border px-4 py-2">{p.pitchNo}</td>
-                  <td className="border px-4 py-2">{p.corporateStatus}</td>
+                  <td className="border px-4 py-2">{p.pitchlabel}</td>
+                  <td className="border px-4 py-2">{p.bookmakername}</td>
+                  <td className="border px-4 py-2">{p.pitchno}</td>
+                  <td className="border px-4 py-2">{p.corporatestatus}</td>
                 </tr>
               ))}
             </tbody>

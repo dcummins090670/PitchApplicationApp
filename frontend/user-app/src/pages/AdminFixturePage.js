@@ -129,7 +129,7 @@ function AdminFixturePage() {
         >
           <option value="">-- Select Racecourse --</option>
           {racecourses.map((r) => (
-            <option key={r.racecourseId} value={r.racecourseId}>
+            <option key={r.racecourseid} value={r.racecourseid}>
               {r.name}
             </option>
           ))}
@@ -163,12 +163,12 @@ function AdminFixturePage() {
           </thead>
           <tbody>
             {fixtures.map((f) => (
-              <tr key={f.fixtureId} className="hover:bg-gray-50">
-                <td className="border px-2 sm:px-4 py-2">{f.fixtureDate}</td>
+              <tr key={f.fixtureid} className="hover:bg-gray-50">
+                <td className="border px-2 sm:px-4 py-2">{f.fixturedate}</td>
                 <td className="border px-2 sm:px-4 py-2">{f.name}</td>
                 <td className="border px-2 sm:px-4 py-2">
                   <button
-                    onClick={() => handleDeleteFixture(f.fixtureId)}
+                    onClick={() => handleDeleteFixture(f.fixtureid)}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                   >
                     Delete

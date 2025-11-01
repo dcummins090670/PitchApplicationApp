@@ -113,12 +113,12 @@ function AdminBookmakerPage() {
           </thead>
           <tbody>
             {bookmakers.map((b) => (
-              <tr key={b.permitNo} className="hover:bg-gray-50">
-                <td className="border px-2 sm:px-4 py-2">{b.permitNo}</td>
+              <tr key={b.permitno} className="hover:bg-gray-50">
+                <td className="border px-2 sm:px-4 py-2">{b.permitno}</td>
                 <td className="border px-2 sm:px-4 py-2">{b.name}</td>
                 <td className="border px-2 sm:px-4 py-2">
                   <button
-                    onClick={() => handleDeleteBookmaker(b.permitNo)}
+                    onClick={() => handleDeleteBookmaker(b.permitno)}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                   >
                     Delete

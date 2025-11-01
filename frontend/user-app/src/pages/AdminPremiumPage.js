@@ -52,7 +52,7 @@ function AdminPremiumPage() {
         // revert to old status if backend rejects
         setFixtures((prevFixtures) =>
           prevFixtures.map((fixture) =>
-            fixture.fixtureId === fixtureId
+            fixture.fixtureid === fixtureId
               ? { ...fixture, premiumAreaAvailable: oldStatus }
               : fixture
           )
@@ -64,7 +64,7 @@ function AdminPremiumPage() {
       // update UI with new status if successful
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
-          fixture.fixtureId === fixtureId
+          fixture.fixtureid === fixtureId
             ? { ...fixture, premiumAreaAvailable: newStatus }
             : fixture
         )
@@ -96,29 +96,29 @@ function AdminPremiumPage() {
             </thead>
             <tbody>
               {fixtures.map((f) => (
-                <tr key={f.fixtureId} className={`hover:bg-gray-100 ${
-                  f.premiumAreaAvailable ? "bg-orange-200" : "bg-gray-300"
+                <tr key={f.fixtureid} className={`hover:bg-gray-100 ${
+                  f.premiumareaavailable ? "bg-orange-200" : "bg-gray-300"
                   }`} // Change background colour of the row to orange if fixture.status has applied to work
                 >   
-                 <td className="border px-2 sm:px-4 py-2">{f.fixtureDate}</td>
+                 <td className="border px-2 sm:px-4 py-2">{f.fixturedate}</td>
                   <td className="border px-2 sm:px-4 py-2">{f.name}</td>
                   <td className="border px-2 sm:px-4 py-2">
                    <label className="flex items-center space-x-2 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={!!f.premiumAreaAvailable}
+                        checked={!!f.premiumareaavailable}
                         onChange={(e) => {
                           const newValue = e.target.checked;
                           handlePremiumArea(
-                            f.fixtureId,
+                            f.fixtureid,
                             newValue,
-                            f.premiumAreaAvailable // keep old value in case backend rejects
+                            f.premiumareaavailable // keep old value in case backend rejects
                             
                           );
                         }}
                         className="w-5 h-5 accent-green-600"
                       />
-                      <span>{f.premiumAreaAvailable ? "Yes" : " "}</span>
+                      <span>{f.premiumareaavailable ? "Yes" : " "}</span>
                     </label>
                     
                   </td>

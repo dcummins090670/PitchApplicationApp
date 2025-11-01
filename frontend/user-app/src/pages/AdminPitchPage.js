@@ -134,7 +134,7 @@ function AdminPitchPage() {
         className="border p-2 rounded mb-4">
         <option value="">Select Racecourse</option>
         {racecourses.map((r) => (
-          <option key={r.racecourseId} value={r.racecourseId}>
+          <option key={r.racecourseid} value={r.racecourseid}>
             {r.name}
           </option>
         ))}
@@ -163,21 +163,21 @@ function AdminPitchPage() {
         </thead>
         <tbody>
           {pitches.map((p) => (
-            <tr key={p.pitchId} className="hover:bg-gray-50">
-              <td className="border px-2 sm:px-4 py-2">{p.pitchLabel}</td>
+            <tr key={p.pitchid} className="hover:bg-gray-50">
+              <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
               <td className="border px-2 sm:px-4 py-2">{p.name}</td>
               <td className="border px-2 sm:px-4 py-2">
                 <select
-                  value={selectedOwners[p.pitchId] ?? ""}  // controlled
+                  value={selectedOwners[p.pitchid] ?? ""}  // controlled
                   onChange={(e) =>
-                    setSelectedOwners(prev => ({ ...prev, [p.pitchId]: e.target.value }))
+                    setSelectedOwners(prev => ({ ...prev, [p.pitchid]: e.target.value }))
                     //handlePitchTransfer(p.pitchId, e.target.value)
                   }
                 >
                   <option value="">Select Bookmaker</option>
                   {bookmakers.map((b) => (
-                    <option key={b.permitNo} value={b.permitNo}>
-                      {b.name} ({b.permitNo})
+                    <option key={b.permitno} value={b.permitno}>
+                      {b.name} ({b.permitno})
                     </option>
                   ))}
                 </select>
@@ -186,21 +186,21 @@ function AdminPitchPage() {
                 <input
                   type="number"
                   placeholder="€"
-                  value={transferValues[p.pitchId] || ""}
+                  value={transferValues[p.pitchid] || ""}
                   onChange={(e) => 
-                  setTransferValues(prev => ({ ...prev, [p.pitchId]: e.target.value })) 
+                  setTransferValues(prev => ({ ...prev, [p.pitchid]: e.target.value })) 
                   //handleValueChange(p.pitchId, e.target.value)
                   }
                 />
               </td>
               <td>
                 <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                disabled={!selectedOwners[p.pitchId]} // prevent null owner
+                disabled={!selectedOwners[p.pitchid]} // prevent null owner
                   onClick={() =>
                     handlePitchTransfer(
-                      p.pitchId,
-                      selectedOwners[p.pitchId],
-                      transferValues[p.pitchId]
+                      p.pitchid,
+                      selectedOwners[p.pitchid],
+                      transferValues[p.pitchid]
                       //p.newOwnerPermitNo // set in dropdown
                     )
                   }

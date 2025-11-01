@@ -85,7 +85,7 @@ function AttendancePage() {
         // revert if it fails 
         setPitches((prevPitches) =>
           prevPitches.map((pitch) =>
-            pitch.pitchId === pitchId
+            pitch.pitchid === pitchId
               ? { ...pitch, attendance: oldStatus }
               : pitch
           )
@@ -97,7 +97,7 @@ function AttendancePage() {
       // update UI with new pitch attendance if successful
       setPitches((prevPitches) =>
         prevPitches.map((pitch) =>
-          pitch.pitchId === pitchId
+          pitch.pitchid === pitchId
             ? { ...pitch, attendance: newStatus }
             : pitch
         )
@@ -120,8 +120,8 @@ function AttendancePage() {
       const attendees = pitches
       .filter((p) => p.attendance === "Attended")
       .map((p) => ({
-        pitchId: p.pitchId,
-        bookmakerPermitNo: p.permitNo, 
+        pitchId: p.pitchid,
+        bookmakerPermitNo: p.permitno, 
       }));
 
       if (attendees.length === 0) {
@@ -162,8 +162,8 @@ function AttendancePage() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureId} value={f.fixtureId}>
-            {f.fixtureDate} – {f.name}
+          <option key={f.fixtureid} value={f.fixtureid}>
+            {f.fixturedate} – {f.name}
           </option>
         ))}
   </select>
@@ -209,7 +209,7 @@ function AttendancePage() {
                       new Set(
                         pitches
                           .filter((p) => p.attendance === "Attended")
-                          .map((p) => p.bookmakerName)
+                          .map((p) => p.bookmakername)
                       ).size
                     }
                   </p>
@@ -232,13 +232,13 @@ function AttendancePage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchId} className={`hover:bg-red-50 ${
+                <tr key={p.pitchid} className={`hover:bg-red-50 ${
                   p.attendance === "Attended" ? "bg-green-200" : "bg-gray-300"
                   }`} // Change background colour of the row to green if fixture.status has applied to work
                 >
-                  <td className="border px-2 sm:px-4">{p.pitchLabel}</td>
-                  <td className="border px-2 sm:px-4">{p.bookmakerName}</td>
-                  <td className="border px-2 sm:px-4">{p.pitchNo}</td>
+                  <td className="border px-2 sm:px-4">{p.pitchlabel}</td>
+                  <td className="border px-2 sm:px-4">{p.bookmakername}</td>
+                  <td className="border px-2 sm:px-4">{p.pitchno}</td>
                   
                   <td className="border px-2 sm:px-4">
                     <label className="flex items-center space-x-2 cursor-pointer">
@@ -249,7 +249,7 @@ function AttendancePage() {
                           const newValue = e.target.checked ? "Attended" : "Did Not Attend";
                           handleAttendance(
                             selectedFixture,
-                            p.pitchId,
+                            p.pitchid,
                             newValue,
                             p.attendance // keep old value in case of API failure
                           );

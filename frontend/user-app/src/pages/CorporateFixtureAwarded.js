@@ -73,8 +73,8 @@ function CorporateFixtureAwarded() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureId} value={f.fixtureId}>
-            {f.fixtureDate} – {f.name}
+          <option key={f.fixtureid} value={f.fixtureid}>
+            {f.fixturedate} – {f.name}
           </option>
         ))}
       </select>
@@ -99,12 +99,12 @@ function CorporateFixtureAwarded() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchId} className={`hover:bg-gray-50 ${
-                p.corporateStatus === "Applied" ? "bg-red-100" : "bg-gray-300"
+                <tr key={p.pitchid} className={`hover:bg-gray-50 ${
+                p.corporatestatus === "Applied" ? "bg-red-100" : "bg-gray-300"
                 }`} // Change background colour of the row to yellow if fixture.status has applied to work
                 > 
-                  <td className="border px-4 py-2">{p.bookmakerName}</td>
-                  <td className="border px-4 py-2">{p.pitchLabel}</td>
+                  <td className="border px-4 py-2">{p.bookmakername}</td>
+                  <td className="border px-4 py-2">{p.pitchlabel}</td>
                   <td className="border px-4 py-2">{p.location}</td>
                   
                 </tr>
