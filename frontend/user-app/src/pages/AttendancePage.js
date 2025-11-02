@@ -39,6 +39,7 @@ function AttendancePage() {
     } else {
       setPitches([]);
     }
+    console.log("Fixture selected:", selectedFixture);
   };
     
 
@@ -47,6 +48,7 @@ function AttendancePage() {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
+      console.log("Token:", token);
       const response = await fetch(`${API_BASE_URL}/api/fixtures/${fixtureId}/pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -123,7 +125,7 @@ function AttendancePage() {
         pitchId: p.pitchid,
         bookmakerPermitNo: p.permitno, 
       }));
-
+      console.log(pitches);
       if (attendees.length === 0) {
       alert("No attendees to store.");
       return;
@@ -131,6 +133,8 @@ function AttendancePage() {
 
     try {
       const token = localStorage.getItem("token");
+      console.log("Sending attendees:", attendees);
+      console.log("Selected fixture:", selectedFixture);
       const response = await fetch(`${API_BASE_URL}/api/fixtures/${selectedFixture}/attendance-list`,
         {
           method: "POST",

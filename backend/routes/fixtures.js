@@ -669,7 +669,8 @@ router.get('/:fixtureId/attended-pitches', async (req, res) => {
 // Update pitch attendance for a fixture (SIS/Admin only)
 router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('sis', 'admin'),async (req, res) => {
         const { fixtureId, pitchId } = req.params;
-        const { attendance } = req.body;      
+        const { attendance } = req.body; 
+        console.log('Received body:', req.body);     
     
 
         // Simple validation
