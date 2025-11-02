@@ -808,13 +808,13 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
         try {
             // First delete existing attendees for this fixture
             await db.query(
-                `DELETE FROM PitchAttendance WHERE fixtureId = $1`,
+                `DELETE FROM pitchattendance WHERE fixtureid = $1`,
             [fixtureId]
                             );
             // Insert all attendees
             for (const a of attendees) {
             await db.query(
-                `INSERT INTO PitchAttendance (fixtureId, pitchId, bookmakerPermitNo, attendedAt)
+                `INSERT INTO pitchattendance (fixtureid, pitchid, bookmakerpermitno, attendedat)
                 VALUES ($1, $2, $3, NOW())`,
                 [fixtureId, a.pitchId, a.bookmakerPermitNo]
             );
