@@ -936,7 +936,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
                 `UPDATE fixture 
                  SET premiumareaavailable = $1
                  
-                 WHERE fixtureId = $2`,
+                 WHERE fixtureid = $2`,
                 [premiumAreaAvailable, fixtureId ]
             );
             

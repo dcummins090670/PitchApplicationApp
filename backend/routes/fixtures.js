@@ -806,16 +806,14 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
         }
 
         try {
-            // First delete existing attendees for this fixture
-            await db.query(
-                `DELETE FROM pitchattendance WHERE fixtureid = $1`,
-            [fixtureId]
-                            );
-            // Insert all attendees
+            
+            // Insert new row for attendees if not exists, else update
             for (const a of attendees) {
             await db.query(
                 `INSERT INTO pitchattendance (fixtureid, pitchid, bookmakerpermitno, attendedat)
-                VALUES ($1, $2, $3, now())`,
+                VALUES ($1, $2, $3, now())
+                ON CONFLICT (fixtureid, pitchid)
+                DO UPDATE SET bookmakerpermitno = EXCLUDED.bookmakerpermitno`,
                 [fixtureId, a.pitchId, a.bookmakerPermitNo]
             );
             }

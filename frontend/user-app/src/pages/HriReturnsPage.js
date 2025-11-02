@@ -96,7 +96,7 @@ function HriReturns({token}) {
     const token = localStorage.getItem("token");
 
     const payload = {
-      fixtureId: selectedFixture.fixtureId,
+      fixtureId: selectedFixture.fixtureid,
       ...values,
     };
 
@@ -111,7 +111,7 @@ function HriReturns({token}) {
     });
     
      if (response.ok) {
-       alert(`Return submitted for ${selectedFixture.name} (${selectedFixture.fixtureDate})`);
+       alert(`Return submitted for ${selectedFixture.name} (${selectedFixture.fixturedate})`);
 
     setValues({ 
         euroTotalStakeAway: 0,
