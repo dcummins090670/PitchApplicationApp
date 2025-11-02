@@ -806,25 +806,25 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
         }
 
         try {
+            await db.query("BEGIN");
             // First delete existing attendees for this fixture
-            await db.query(
-                `DELETE FROM pitchattendance WHERE fixtureid = $1`,
-            [fixtureId]
-                            );
+            await db.query(`DELETE FROM pitchattendance WHERE fixtureid = $1`, [fixtureId]);
             // Insert all attendees
             for (const a of attendees) {
-            await db.query(
+             await db.query(
                 `INSERT INTO pitchattendance (fixtureid, pitchid, bookmakerpermitno, attendedat)
                 VALUES ($1, $2, $3, NOW())`,
                 [fixtureId, a.pitchId, a.bookmakerPermitNo]
-            );
+             );
             }
-
+            await db.query("COMMIT");
             res.json({ message: "Attendees stored successfully" });
+
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: "Database error" });
-        }
+            await db.query("ROLLBACK");
+            console.error("Transaction failed:", err.message);
+            res.status(500).json({ error: err.message });
+            }
         });   
        
         
