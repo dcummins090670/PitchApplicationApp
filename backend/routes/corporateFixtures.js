@@ -756,7 +756,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
             await db.query(
                 `INSERT INTO corporatefixturepitch (fixtureid, pitchid, racecourseid, location)
                 VALUES ($1, $2, $3, $4)
-                ON CONFLICT (fixtureid, pitchid, racecourseid)
+                ON CONFLICT (fixtureid, pitchid)
                 DO UPDATE SET location = EXCLUDED.location`,
                 [fixtureId, pitchId, racecourseId, location]
             );

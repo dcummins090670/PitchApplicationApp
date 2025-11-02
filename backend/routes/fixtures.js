@@ -670,8 +670,7 @@ router.get('/:fixtureId/attended-pitches', async (req, res) => {
 router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('sis', 'admin'),async (req, res) => {
         const { fixtureId, pitchId } = req.params;
         const { attendance } = req.body; 
-        console.log('Received body:', req.body);     
-    
+           
 
         // Simple validation
         const validOption = ['Did Not Attend', 'Attended'];
@@ -798,6 +797,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
         });
 
      router.post("/:fixtureId/attendance-list", async (req, res) => {
+        console.log('Received body:', req.body);     
         const { fixtureId } = req.params;
         const { attendees } = req.body;
 
@@ -822,8 +822,8 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
 
             res.json({ message: "Attendees stored successfully" });
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: "Database error" });
+            console.error("Database error details:", err);
+            res.status(500).json({ error: err.message });
         }
         });   
 

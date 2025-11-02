@@ -172,7 +172,7 @@ function HriReturns({token}) {
          
      <form onSubmit={handleSubmit} className="max-w-md mx-auto" >
         
-      <h2 className="text-xl font-bold mb-4">HRI Return for {selectedFixture.name} ({selectedFixture.fixtureDate})</h2>
+      <h2 className="text-xl font-bold mb-4">HRI Return for {selectedFixture.name} ({selectedFixture.fixturedate})</h2>
       <div className="border rounded-lg shadow p-4">
 
         {/*Euro - Away Section*/}

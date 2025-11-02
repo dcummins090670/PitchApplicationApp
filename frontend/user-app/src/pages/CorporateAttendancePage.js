@@ -200,10 +200,10 @@ function CorporateAttendancePage() {
                   p.location === "Main Ring & Corporate Area" ? "bg-red-100" : "bg-gray-300"
                   }`} // Change background colour of the row to red if fixture.status has applied to work in corporate area
                 >
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchLabel}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.bookmakerName}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchNo}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.corporateStatus}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.bookmakername}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitchno}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.corporatestatus}</td>
                   <td className="border px-2 sm:px-4 py-2">
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input
