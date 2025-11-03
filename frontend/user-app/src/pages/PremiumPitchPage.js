@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { formatDate } from "../utils/dateUtils";
 function PremiumPitchPage() {
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,7 +104,7 @@ function PremiumPitchPage() {
               fixture.premiumstatus === "Applied" ? "bg-orange-200" : "bg-gray-300"
             }`} // Change background colour of the row to orange if fixture.status has applied to work
             >
-                <td className="border px-2 sm:px-4 py-2">{fixture.fixturedate}</td>
+                <td className="border px-2 sm:px-4 py-2">{formatDate(fixture.fixturedate)}</td>
                 <td className="border px-2 sm:px-4 py-2">{fixture.racecoursename}</td>
                 <td className="border px-2 sm:px-4 py-2">{fixture.pitchlabel}</td>
                 <td className="border px-2 sm:px-4 py-2">{fixture.pitchno}</td>

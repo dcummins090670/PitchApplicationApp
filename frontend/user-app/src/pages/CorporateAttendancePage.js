@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-//import { ping } from "../../../../backend/config/db";
+import { formatDate } from "../utils/dateUtils";
 
 function CorporateAttendancePage() {
   const [fixtures, setFixtures] = useState([]);
@@ -170,7 +170,7 @@ function CorporateAttendancePage() {
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
           <option key={f.fixtureid} value={f.fixtureid}>
-            {f.fixturedate} – {f.name}
+            {FormData(f.fixturedate)} – {f.name}
           </option>
         ))}
       </select>

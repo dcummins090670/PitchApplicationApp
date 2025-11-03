@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { formatDate } from "../utils/dateUtils";
 function AdminFixturePage() {
   const [fixtures, setFixtures] = useState([]);
   const [racecourses, setRacecourses] = useState([]);
@@ -115,7 +115,7 @@ function AdminFixturePage() {
       <form onSubmit={handleAddFixture} className="mb-6 space-x-2">
         <input
           type="date"
-          value={fixtureDate}
+          value={formatDate(fixtureDate)}
           onChange={(e) => setFixtureDate(e.target.value)}
           className="border px-2 py-1 rounded"
           required

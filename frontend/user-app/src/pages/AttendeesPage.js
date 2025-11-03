@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { formatDate } from "../utils/dateUtils";
 function AttendeesPage() {
   const [fixtures, setFixtures] = useState([]);
   const [pitches, setPitches] = useState([]);
@@ -71,7 +71,7 @@ function AttendeesPage() {
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
           <option key={f.fixtureid} value={f.fixtureid}>
-            {f.fixturedate} – {f.name}
+            {formatDate(f.fixturedate)} – {f.name}
           </option>
         ))}
   </select>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { formatDate } from "../utils/dateUtils";
 function AdminCorporatePage() {
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -100,7 +100,7 @@ function AdminCorporatePage() {
                     f.corporateareaavailable ? "bg-red-200" : "bg-gray-300"
                     }`} // Change background colour of the row to orange if fixture.status has applied to work
                   >   
-                  <td className="border px-2 sm:px-4 py-2">{f.fixturedate}</td>
+                  <td className="border px-2 sm:px-4 py-2">{formatDate(f.fixturedate)}</td>
                   <td className="border px-2 sm:px-4 py-2">{f.name}</td>
                   <td className="border px-2 sm:px-4 py-2">
                    <label className="flex items-center space-x-2 cursor-pointer">

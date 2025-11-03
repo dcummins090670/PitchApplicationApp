@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { formatDate } from "../utils/dateUtils";
 function CorporateAttendeesPage() {
   const [racecourses, setRacecourses] = useState([]);
   const [attendees, setAttendees] = useState([]);
@@ -93,7 +93,7 @@ function CorporateAttendeesPage() {
           <tbody>
             {attendees.map((a) => (
               <tr key={a.id} className="hover:bg-gray-50">
-                <td className="border px-2 sm:px-4 py-2">{a.fixturedate}</td>
+                <td className="border px-2 sm:px-4 py-2">{formatDate(a.fixturedate)}</td>
                 <td className="border px-2 sm:px-4 py-2">{a.name}</td> 
                 <td className="border px-2 sm:px-4 py-2">{a.location}</td> 
                 <td className="border px-2 sm:px-4 py-2">{a.pitchno}</td>               
