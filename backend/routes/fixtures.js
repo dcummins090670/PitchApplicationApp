@@ -827,24 +827,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
             }
         });   
        
-        
-            /* Insert new row for attendees if not exists, else update
-            for (const a of attendees) {
-            await db.query(
-                `INSERT INTO pitchattendance (fixtureid, pitchid, bookmakerpermitno, attendedat)
-                VALUES ($1, $2, $3, now())
-                ON CONFLICT (fixtureid, pitchid)
-                DO UPDATE SET bookmakerpermitno = EXCLUDED.bookmakerpermitno`,
-                [fixtureId, a.pitchId, a.bookmakerPermitNo]
-            );
-            }
-            */
-
-
-
-
    
-
 module.exports = router;
 
 

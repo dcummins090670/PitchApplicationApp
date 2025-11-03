@@ -140,7 +140,9 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
             p.pitchno
             FROM pitch p
             JOIN users u ON p.ownerpermitno = u.permitno
-            WHERE racecourseid = $1`, [racecourseId]
+            WHERE racecourseid = $1
+            ORDER BY p.pitchlabel ASC`,
+           [racecourseId]
            
             );
           
@@ -184,8 +186,8 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
                 // Log transfer
                 await db.query(`
                     INSERT INTO pitchtransfer 
-                    (pitchid, oldownerpermitno, newownerpermitno, transfervalue) VALUES ($1, $2, $3, $4)`,
-                    [pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue ?? null]
+                    (pitchid, oldownerpermitno, newownerpermitno, transfervalue, transferdate) VALUES ($1, $2, $3, $4, $5)`,
+                    [pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue ?? null, now()]
                     );
 
                 res.json({ message: 'Pitch transferred successfully' });

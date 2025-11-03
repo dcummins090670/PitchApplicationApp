@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { formatDate } from "../utils/dateUtils";
 
 /*
 function MyPitchesPage() {
@@ -295,7 +296,7 @@ return (
               fixture.status === "Applied" ? "bg-green-300": "bg-gray-300"
             }`} // Change background colour of the row to green if fixture.status has applied to work
           >
-                <td className="border px-2 sm:px-4 py-2">{fixture.fixturedate}</td>
+                <td className="border px-2 sm:px-4 py-2">{formatDate(fixture.fixturedate)}</td>
                 <td className="border px-2 sm:px-4 py-2">{fixture.racecoursename}</td>
                 <td className="border px-2 sm:px-4 py-2">{fixture.pitchlabel}</td>
                 <td className="border px-2 sm:px-4 py-2">{fixture.pitchno}</td>
@@ -331,7 +332,7 @@ return (
             >
               <div className="flex justify-between">
                 <h2 className="font-semibold text-lg">{fixture.racecoursename} 
-                  <span className="text-lg text-gray-800">: {fixture.fixturedate}</span>
+                  <span className="text-lg text-gray-800">: {formatDate(fixture.fixturedate)}</span>
                 </h2>
                 
               </div>
