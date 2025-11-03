@@ -971,7 +971,7 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
             // Insert new row if not exists, else update
              await db.query(
                 `UPDATE fixture 
-                 SET numberffpremiumpitches = $2
+                 SET numberoffpremiumpitches = $2
                  WHERE fixtureId = $1`,
                 [fixtureId, numberOfPremiumPitches]
             );

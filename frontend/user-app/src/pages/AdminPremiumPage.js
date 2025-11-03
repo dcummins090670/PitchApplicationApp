@@ -53,7 +53,7 @@ function AdminPremiumPage() {
         setFixtures((prevFixtures) =>
           prevFixtures.map((fixture) =>
             fixture.fixtureid === fixtureId
-              ? { ...fixture, premiumAreaAvailable: oldStatus }
+              ? { ...fixture, premiumareaavailable: oldStatus }
               : fixture
           )
         );
@@ -65,7 +65,7 @@ function AdminPremiumPage() {
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
           fixture.fixtureid === fixtureId
-            ? { ...fixture, premiumAreaAvailable: newStatus }
+            ? { ...fixture, premiumareaavailable: newStatus }
             : fixture
         )
       );

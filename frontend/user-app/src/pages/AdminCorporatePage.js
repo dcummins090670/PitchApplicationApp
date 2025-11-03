@@ -53,7 +53,7 @@ function AdminCorporatePage() {
         setFixtures((prevFixtures) =>
           prevFixtures.map((fixture) =>
             fixture.fixtureid === fixtureId
-              ? { ...fixture, corporateAreaAvailable: oldStatus }
+              ? { ...fixture, corporateareaavailable: oldStatus }
               : fixture
           )
         );
@@ -65,7 +65,7 @@ function AdminCorporatePage() {
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
           fixture.fixtureid === fixtureId
-            ? { ...fixture, corporateAreaAvailable: newStatus }
+            ? { ...fixture, corporateareaavailable: newStatus }
             : fixture
         )
       );
