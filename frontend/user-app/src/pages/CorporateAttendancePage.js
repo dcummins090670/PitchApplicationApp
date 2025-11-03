@@ -170,7 +170,7 @@ function CorporateAttendancePage() {
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
           <option key={f.fixtureid} value={f.fixtureid}>
-            {FormData(f.fixturedate)} – {f.name}
+            {formatDate(f.fixturedate)} – {f.name}
           </option>
         ))}
       </select>

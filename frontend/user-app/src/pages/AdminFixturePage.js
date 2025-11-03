@@ -115,7 +115,7 @@ function AdminFixturePage() {
       <form onSubmit={handleAddFixture} className="mb-6 space-x-2">
         <input
           type="date"
-          value={formatDate(fixtureDate)}
+          value={fixtureDate}
           onChange={(e) => setFixtureDate(e.target.value)}
           className="border px-2 py-1 rounded"
           required
@@ -164,7 +164,7 @@ function AdminFixturePage() {
           <tbody>
             {fixtures.map((f) => (
               <tr key={f.fixtureid} className="hover:bg-gray-50">
-                <td className="border px-2 sm:px-4 py-2">{f.fixturedate}</td>
+                <td className="border px-2 sm:px-4 py-2">{formatDate(f.fixturedate)}</td>
                 <td className="border px-2 sm:px-4 py-2">{f.name}</td>
                 <td className="border px-2 sm:px-4 py-2">
                   <button

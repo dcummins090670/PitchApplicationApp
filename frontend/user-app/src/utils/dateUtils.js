@@ -1,5 +1,3 @@
-// src/utils/dateUtils.js
-
 /**
  * Format a date string (ISO, timestamp, or Date object) to dd-mm-yy
  * Example: "2025-11-02" → "02-11-25"
@@ -16,7 +14,21 @@ export const formatDate = (dateInput) => {
       month: "2-digit",
       year: "2-digit",
     })
-    .replaceAll("/", "-");
+   ;
 };
 
+export const formatDateWithDay = (dateInput) => {
+  const date = new Date(dateInput);
+  return date.toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  }); // e.g. "Sun, 02-11-25"
+};
 
+ //})
+ //   .replaceAll("/", "-");
+
+
+// }).replaceAll("/", "-"); // e.g. "Sun, 02-11-25"
