@@ -13,9 +13,13 @@ function LoginPage() {
   // to allow for testing locally and online
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
+  
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+
+    console.log("API_BASE_URL:", API_BASE_URL); 
     
     try {
        // const response = await fetch('/api/auth/login', {
@@ -27,7 +31,8 @@ function LoginPage() {
 
       if (!response.ok) {
         const errorData = await response.json(); // Handle 4xx or 5xx errors
-        throw new Error(errorData.message || 'Login failed');
+        throw new Error(errorData.error || errorData.message || 'Login failed');
+
       }
      
 
