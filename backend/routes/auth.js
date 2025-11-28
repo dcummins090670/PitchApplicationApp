@@ -146,7 +146,7 @@ router.post('/login', async (req, res) => {
         console.log('Received login request:', { permitNo, password });
         //1. Look up the user in MySQL by permitNo
         const result = await db.query(
-            'SELECT u.permitno, u.name, u.email, u.password_hash, r.name AS role FROM users u JOIN roles r ON u.role_id = r.id WHERE permitno = $1',
+            'SELECT u.permitno, u.name, u.email, u.password_hash, r.name AS role FROM users u JOIN roles r ON u.role_id = r.id WHERE LOWER(permitno) = LOWER ($1'),
             [permitNo]
         );
         
