@@ -222,7 +222,7 @@ router.put('/:fixtureId/:pitchId/attendance',authenticateToken,authorizeRoles('s
         // PostgreSQL - Insert new row if not exists, else update
            await db.query(
                 `INSERT INTO fixture_pitch (fixture_id, pitch_id, attendance)
-                VALUES (S1, S2, $3)
+                VALUES ($1, $2, $3)
                 ON CONFLICT (fixture_id, pitch_id)
                 DO UPDATE SET attendance = EXCLUDED.attendance`, 
                 [fixtureId, pitchId, attendance]
