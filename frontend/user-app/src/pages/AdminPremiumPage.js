@@ -80,7 +80,6 @@ function AdminPremiumPage() {
       
     }
   };
-
 const handleNumberOfPitches = async (fixtureId, newValue) => {
   try {
     const token = localStorage.getItem("token");
@@ -123,7 +122,6 @@ const handleNumberOfPitches = async (fixtureId, newValue) => {
 };
 
 
-
  return (
   <div className="p-4">
           <h1 className="text-xl font-bold p-2 mb-4">Update Premium Area Fixtures</h1>
@@ -136,7 +134,7 @@ const handleNumberOfPitches = async (fixtureId, newValue) => {
                 <th className="border px-2 sm:px-4 py-2 text-left">Date</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Racecourse</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Premium Area Avaiable</th>
-                 <th className="border px-2 sm:px-4 py-2 text-left">No. of Pitches</th>
+                <th className="border px-2 sm:px-4 py-2 text-left">No. of Pitches</th>
               </tr>
             </thead>
             <tbody>
