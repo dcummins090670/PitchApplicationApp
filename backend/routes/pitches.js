@@ -3,108 +3,7 @@ const router = express.Router();
 const db = require('../config/db');
 const { authenticateToken, authorizeRoles } = require('../middleware/authMiddleware');
 
-/*
-// ---- This is the code used for the MYSQL ----------
 
-// Get all racecourses so that we can use racecourse.name rather than id to add a new fixture
-router.get('/racecourses',authenticateToken,authorizeRoles('admin'),async (req, res) => { 
-           
-        try {
-            const [results] = await db.query(`
-
-                SELECT racecourseId,
-                name 
-                FROM Racecourse 
-                ORDER BY name ASC`
-            );
-
-        res.json(results);
-        } catch (err) {
-                console.error(err);
-                res.status(500).json({ error: err.message });
-        }
-    }
-    );
-
-// Get pitches for a particular racecourse
-router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-    const { racecourseId } = req.params;
-    try {
-            const [results] = await db.query(`
-
-            SELECT p.pitchId,
-            u.name, 
-            CAST(p.seniorityDate AS DATE) AS seniority,
-            p.pitchLabel,
-            p.pitchNo
-            FROM Pitch p
-            JOIN Users u ON p.ownerPermitNo = u.permitNo
-            WHERE racecourseId = ?`, [racecourseId]
-           
-            );
-          
-
-        res.json(results);
-        } catch (err) {
-                console.error(err);
-                res.status(500).json({ error: err.message });
-        }
-});
-
-// Update transfer of pitch
-     router.put('/:pitchId/transfer', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-        const { pitchId } = req.params;
-        const { newOwnerPermitNo, transferValue } = req.body;
-
-         if (!newOwnerPermitNo) {
-            return res.status(400).json({ error: "newOwnerPermitNo is required" });
-        }
-
-            try {
-
-                // Get current owner first
-                const [current] = await db.query(
-                "SELECT ownerPermitNo FROM Pitch WHERE pitchId = ?",
-                [pitchId]
-                );
-
-                if (current.length === 0) {
-                return res.status(404).json({ error: "Pitch not found" });
-                }
-                const oldOwnerPermitNo = current[0].ownerPermitNo;
-
-                // Update pitch owner
-                await db.query(`
-                    UPDATE Pitch 
-                    SET ownerPermitNo = ?
-                    WHERE pitchId = ?`, 
-                    [newOwnerPermitNo, pitchId]);
-
-                // Log transfer
-                await db.query(`
-                    INSERT INTO PitchTransfer 
-                    (pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue) VALUES (?, ?, ?, ?)`,
-                    [pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue ?? null]
-                    );
-
-                res.json({ message: 'Pitch transferred successfully' });
-            } catch (err) {
-                console.error(err);
-                res.status(500).json({ error: err.message });
-            }
-        });
-
-
-
-
-// SIS-only route
-router.post('/:permitNo/attendance', authenticateToken, authorizeRoles('sis'), (req, res) => {
-    res.json({ message: `Attendance confirmed for pitch ${req.params.permitNo}` });
-});
-*/
-
-
-// ---- This is the code used for the MYSQL ----------
 
 // Get all racecourses so that we can use racecourse.name rather than id to add a new fixture
 router.get('/racecourses',authenticateToken,authorizeRoles('admin'),async (req, res) => { 
@@ -112,7 +11,7 @@ router.get('/racecourses',authenticateToken,authorizeRoles('admin'),async (req, 
         try {
             const result = await db.query(`
 
-                SELECT racecourseid,
+                SELECT racecourse_id,
                 name 
                 FROM racecourse 
                 ORDER BY name ASC`
@@ -133,15 +32,15 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
     try {
             const result = await db.query(`
 
-            SELECT p.pitchid,
+            SELECT p.pitch_id,
             u.name, 
-            CAST(p.senioritydate AS DATE) AS seniority,
-            p.pitchlabel,
-            p.pitchno
+            CAST(p.seniority_date AS DATE) AS seniority,
+            p.pitch_label,
+            p.pitch_no
             FROM pitch p
-            JOIN users u ON p.ownerpermitno = u.permitno
-            WHERE racecourseid = $1
-            ORDER BY p.pitchlabel ASC`,
+            JOIN users u ON p.owner_permit_no = u.permit_no
+            WHERE racecourse_id = $1
+            ORDER BY p.pitch_label ASC`,
            [racecourseId]
            
             );
@@ -167,27 +66,27 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
 
                 // Get current owner first
                 const currentResult = await db.query(
-                "SELECT ownerpermitno FROM pitch WHERE pitchid = $1",
+                "SELECT owner_permit_no FROM pitch WHERE pitch_id = $1",
                 [pitchId]
                 );
                 const current = currentResult.rows;
                 if (current.length === 0) {
                 return res.status(404).json({ error: "Pitch not found" });
                 }
-                const oldOwnerPermitNo = current[0].ownerpermitno;
+                const oldOwnerPermitNo = current[0].owner_permit_no;
 
                 // Update pitch owner
                 await db.query(`
                     UPDATE pitch 
-                    SET ownerpermitno = $2
-                    WHERE pitchid = $1`, 
+                    SET owner_permit_no = $2
+                    WHERE pitch_id = $1`, 
                     [pitchId, newOwnerPermitNo ]);
 
                 // Log transfer
                 await db.query(`
-                    INSERT INTO pitchtransfer 
-                    (pitchid, oldownerpermitno, newownerpermitno, transfervalue, transferdate) VALUES ($1, $2, $3, $4, $5)`,
-                    [pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue ?? null, now()]
+                    INSERT INTO pitch_transfer 
+                    (pitch_id, old_owner_permit_no, new_owner_permit_no, transfer_value, transfer_date) VALUES ($1, $2, $3, $4, now())`,
+                    [pitchId, oldOwnerPermitNo, newOwnerPermitNo, transferValue ?? null]
                     );
 
                 res.json({ message: 'Pitch transferred successfully' });
@@ -199,15 +98,13 @@ router.get('/:racecourseId', authenticateToken, authorizeRoles('admin'), async (
 
 
 
-
+    /*
     // SIS-only route
     router.post('/:permitNo/attendance', authenticateToken, authorizeRoles('sis'), (req, res) => {
         res.json({ message: `Attendance confirmed for pitch ${req.params.permitNo}` });
     });
-
+    */
 
 module.exports = router;
 
 
-// DATE_FORMAT(p.seniorityDate, '%Y-%m-%d') AS seniority,
-// CAST(p.seniorityDate AS DATE) AS seniority,

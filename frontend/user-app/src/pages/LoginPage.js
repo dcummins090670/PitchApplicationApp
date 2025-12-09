@@ -19,9 +19,7 @@ function LoginPage() {
     e.preventDefault();
     setError('');
 
-    console.log("API_BASE_URL:", API_BASE_URL); 
-    
-    try {
+  try {
        // const response = await fetch('/api/auth/login', {
        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
@@ -39,7 +37,7 @@ function LoginPage() {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify({role:data.role})); // *1 -user object contains 'role' see above
-      login(data.token, data.user);  // call Context Login for token and user
+      //login(data.token, data.user);  // call Context Login for token and user
       login(data.token, {role: data.role});  // *2 - update version - see above
             
       

@@ -73,8 +73,8 @@ function PremiumFixtureAwarded() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureid} value={f.fixtureid}>
-            {formatDate(f.fixturedate)} – {f.name}
+          <option key={f.fixture_id} value={f.fixture_id}>
+            {formatDate(f.fixture_date)} – {f.name}
           </option>
         ))}
       </select>
@@ -99,12 +99,12 @@ function PremiumFixtureAwarded() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchid} className={`hover:bg-red-100 ${
+                <tr key={p.pitch_id} className={`hover:bg-red-100 ${
                 p.premiumstatus === "Applied" ? "bg-orange-100" : "bg-gray-200"
                 }`} // Change background colour of the row to yellow if fixture.status has applied to work
                 > 
-                  <td className="border px-2 sm:px-4 py-2">{p.bookmakername}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.bookmaker_name}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitch_label}</td>
                   <td className="border px-2 sm:px-4 py-2">{p.location}</td>
                   
                 </tr>

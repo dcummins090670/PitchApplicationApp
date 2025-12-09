@@ -67,7 +67,7 @@ function PremiumAttendeesPage() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Racecourse --</option>
         {racecourses.map((r) => (
-          <option key={r.racecourseid} value={r.racecourseid}>
+          <option key={r.racecourse_id} value={r.racecourse_id}>
             {r.name}
           </option>
         ))}
@@ -93,10 +93,10 @@ function PremiumAttendeesPage() {
           <tbody>
             {attendees.map((a) => (
               <tr key={a.id} className="hover:bg-gray-200">
-                <td className="border px-2 sm:px-4 py-2">{formatDate(a.fixturedate)}</td>
+                <td className="border px-2 sm:px-4 py-2">{formatDate(a.fixture_date)}</td>
                 <td className="border px-2 sm:px-4 py-2">{a.name}</td> 
                 <td className="border px-2 sm:px-4 py-2">{a.location}</td> 
-                <td className="border px-2 sm:px-4 py-2">{a.pitchno}</td>               
+                <td className="border px-2 sm:px-4 py-2">{a.pitch_no}</td>               
               </tr>
             ))}
           </tbody>

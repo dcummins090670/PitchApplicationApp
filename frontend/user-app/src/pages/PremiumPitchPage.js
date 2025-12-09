@@ -52,8 +52,8 @@ function PremiumPitchPage() {
         // revert to old status if backend rejects
         setFixtures((prevFixtures) =>
           prevFixtures.map((fixture) =>
-            fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
-              ? { ...fixture, premiumstatus: oldStatus }
+            fixture.fixture_id === fixtureId && fixture.pitch_id === pitchId
+              ? { ...fixture, premium_status: oldStatus }
               : fixture
           )
         );
@@ -64,8 +64,8 @@ function PremiumPitchPage() {
       // update UI with new status if successful
       setFixtures((prevFixtures) =>
         prevFixtures.map((fixture) =>
-          fixture.fixtureid === fixtureId && fixture.pitchid === pitchId
-            ? { ...fixture, premiumstatus: newStatus }
+          fixture.fixture_id === fixtureId && fixture.pitch_id === pitchId
+            ? { ...fixture, premium_status: newStatus }
             : fixture
         )
       );
@@ -101,21 +101,21 @@ function PremiumPitchPage() {
           <tbody>
             {fixtures.map((fixture, index) => (
             <tr key={index} className={`hover:bg-gray-100 ${
-              fixture.premiumstatus === "Applied" ? "bg-orange-200" : "bg-gray-300"
+              fixture.premium_status === "Applied" ? "bg-orange-200" : "bg-gray-300"
             }`} // Change background colour of the row to orange if fixture.status has applied to work
             >
-                <td className="border px-2 sm:px-4 py-2">{formatDate(fixture.fixturedate)}</td>
-                <td className="border px-2 sm:px-4 py-2">{fixture.racecoursename}</td>
-                <td className="border px-2 sm:px-4 py-2">{fixture.pitchlabel}</td>
-                <td className="border px-2 sm:px-4 py-2">{fixture.pitchno}</td>
+                <td className="border px-2 sm:px-4 py-2">{formatDate(fixture.fixture_date)}</td>
+                <td className="border px-2 sm:px-4 py-2">{fixture.racecourse_name}</td>
+                <td className="border px-2 sm:px-4 py-2">{fixture.pitch_label}</td>
+                <td className="border px-2 sm:px-4 py-2">{fixture.pitch_no}</td>
                 <td className="border px-2 sm:px-4 py-2"> 
-                    <select value={fixture.premiumstatus || ""}
+                    <select value={fixture.premium_status || ""}
                       onChange={(e) => handlePremiumStatusChange(
-                          fixture.fixtureid,
-                          fixture.pitchid,
-                          fixture.racecourseid,
+                          fixture.fixture_id,
+                          fixture.pitch_id,
+                          fixture.racecourse_id,
                           e.target.value,
-                          fixture.premiumstatus // keep old value in case backend rejects
+                          fixture.premium_status // keep old value in case backend rejects
                         )}className="border px-2 sm:px-4 py-2" >
                       <option value="">-- Select Option--</option>
                       <option value="Not Applying">Stay in Main Ring</option>

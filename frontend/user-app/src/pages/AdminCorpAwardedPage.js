@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { formatDate } from "../utils/dateUtils";
 
-function PremiumAttendancePage() {
+function AdminCorpAwardedPage() {
   const [fixtures, setFixtures] = useState([]);
   const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
-
+  
   useEffect(() => {
-    const fetchPremiumFixtures = async () => {
+    const fetchCorporateFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`${API_BASE_URL}/api/premiumFixtures`,        
+        const response = await fetch(`${API_BASE_URL}/api/corporateFixtures`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -29,17 +29,17 @@ function PremiumAttendancePage() {
         console.error(error);
       }
     };
-  fetchPremiumFixtures();
+  fetchCorporateFixtures();
   }, []);
 
 
-   const handlePremiumFixtureChange = async (e) => {
+   const handleCorporateFixtureChange = async (e) => {
     const fixtureId = e.target.value;
     setSelectedFixture(fixtureId); // Save it in state
     
     
     if (fixtureId) {
-      await fetchPremiumPitches(fixtureId);
+      await fetchCorporatePitches(fixtureId);
     } else {
       setPitches([]);
     }
@@ -47,11 +47,11 @@ function PremiumAttendancePage() {
     
 
     // This will use the fixtureId to fetch the pitches
-    const fetchPremiumPitches = async (fixtureId) => {
+    const fetchCorporatePitches = async (fixtureId) => {
     setLoading (true); 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${fixtureId}/premium-pitches`,
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/${fixtureId}/corporate-pitches`,
          { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response.ok) throw new Error("Failed to fetch pitches");
@@ -66,11 +66,11 @@ function PremiumAttendancePage() {
       };
 
 
-     // Extra code to handle attendance change
-  const handlePremiumAttendance = async (fixtureId, pitchId, racecourseId, newStatus, oldStatus) => {
+     // Extra code to handle ststus change
+  const handleCorporateStatus = async (fixtureId, pitchId, racecourseId, newStatus, oldStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${fixtureId}/${pitchId}/${racecourseId}/attendance`,        
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/${fixtureId}/${pitchId}/${racecourseId}/status`,        
         {
           method: "PUT",
           headers: {
@@ -89,7 +89,7 @@ function PremiumAttendancePage() {
         // revert if it fails 
         setPitches((prevPitches) =>
           prevPitches.map((pitch) =>
-            pitch.pitchid === pitchId
+            pitch.pitch_id === pitchId
               ? { ...pitch, location: oldStatus }
               : pitch
           )
@@ -101,7 +101,7 @@ function PremiumAttendancePage() {
       // update UI with new pitch location if successful
       setPitches((prevPitches) =>
         prevPitches.map((pitch) =>
-          pitch.pitchid === pitchId
+          pitch.pitch_id === pitchId
             ? { ...pitch, location: newStatus }
             : pitch
         )
@@ -122,10 +122,10 @@ function PremiumAttendancePage() {
             return;
   }
       const attendees = pitches
-      .filter((p) => p.location === "Premium Area")
+      .filter((p) => p.location === "Main Ring & Corporate Area")
       .map((p) => ({
-        pitchId: p.pitchid,
-        bookmakerPermitNo: p.permitno, 
+        pitchId: p.pitch_id,
+        bookmakerPermitNo: p.permit_no, 
       }));
 
       if (attendees.length === 0) {
@@ -135,7 +135,7 @@ function PremiumAttendancePage() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/api/premiumFixtures/${selectedFixture}/attendance-list`,
+      const response = await fetch(`${API_BASE_URL}/api/corporateFixtures/${selectedFixture}/attendance-list`,
         {
           method: "POST",
           headers: {
@@ -150,7 +150,7 @@ function PremiumAttendancePage() {
       if (!response.ok) throw new Error(data.error || "Failed to store attendees");
 
       alert("Attendees stored successfully!");
-      navigate("/prem-attendees"); 
+      navigate("/corp-attendees"); 
     } catch (err) {
       console.error("Error storing attendees:", err);
       alert("Error storing attendees");
@@ -161,16 +161,16 @@ function PremiumAttendancePage() {
  return (
 
   <div className="p-4">
-    <h1 className="text-xl font-bold mb-4">Select Pitches to move to Premium</h1>
+    <h1 className="text-xl font-bold mb-4">Select Pitches to move to Corporate</h1>
     
     <select
-        onChange={handlePremiumFixtureChange}
+        onChange={handleCorporateFixtureChange}
         className="border p-2 rounded mb-4"
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureid} value={f.fixtureid}>
-            {formatDate(f.fixturedate)} – {f.name}
+          <option key={f.fixture_id} value={f.fixture_id}>
+            {formatDate(f.fixture_date)} – {f.name}
           </option>
         ))}
       </select>
@@ -186,42 +186,42 @@ function PremiumAttendancePage() {
             <h2 className="text-lg font-bold mb-2">Pitches at Fixture</h2>*/
           <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
             <thead>
-              <tr className="text-white bg-orange-900">
+              <tr className="text-white bg-red-600">
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Bookmaker</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch No</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Status</th>
-                <th className="border px-2 sm:px-4 py-2 text-left">Select Premium Pitches</th>
+                <th className="border px-2 sm:px-4 py-2 text-left">Select Corporate Pitches</th>
               </tr>
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchid} className={`hover:bg-gray-100 ${
-                  p.location === "Premium Area" ? "bg-orange-200" : "bg-gray-300"
-                  }`} // Change background colour of the row to green if fixture.status has applied to work
+                <tr key={p.pitch_id} className={`hover:bg-gray-100 ${
+                  p.location === "Main Ring & Corporate Area" ? "bg-red-100" : "bg-gray-300"
+                  }`} // Change background colour of the row to red if fixture.status has applied to work in corporate area
                 >
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.bookmakername}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchno}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.premiumstatus}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitch_label}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.bookmaker_name}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitch_no}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.corporate_status}</td>
                   <td className="border px-2 sm:px-4 py-2">
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={p.location === "Premium Area"}
+                        checked={p.location === "Main Ring & Corporate Area"}
                         onChange={(e) => {
-                          const newValue = e.target.checked ? "Premium Area" : "Main Ring";
-                          handlePremiumAttendance(
+                          const newValue = e.target.checked ? "Main Ring & Corporate Area" : "Main Ring";
+                          handleCorporateStatus(
                             selectedFixture,
-                            p.pitchid,
-                            p.racecourseid,
+                            p.pitch_id,
+                            p.racecourse_id,
                             newValue,
                             p.location // keep old value in case of API failure
                           );
                         }}
                         className="w-5 h-5 accent-green-600"
                       />
-                      <span>{p.location === "Premium Area" ? "Premium Area" : " "}</span>
+                      <span>{p.location === "Main Ring & Corporate Area" ? "Main Ring & Corporate Area" : " "}</span>
                     </label>
                   </td>
                 </tr>
@@ -233,13 +233,13 @@ function PremiumAttendancePage() {
     )}
     <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"     
       onClick={storeAttendees} >
-      Store Premium Attendees
+      Store Corporate Attendees
     </button>
    </div>
   );
 };
 
-export default PremiumAttendancePage;
+export default AdminCorpAwardedPage;
 
 
 

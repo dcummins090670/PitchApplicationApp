@@ -75,8 +75,8 @@ function PremiumFixturesPage() {
          
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureid} value={f.fixtureid}>
-            {formatDate(f.fixturedate)} – {f.name}
+          <option key={f.fixture_id} value={f.fixture_id}>
+            {formatDate(f.fixture_date)} – {f.name}
           </option>          
         ))}
         
@@ -101,7 +101,7 @@ function PremiumFixturesPage() {
                   {/* Total Pitches */}
                   <div className="bg-orange-400 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Premium Pitches Available</p>
-                    <p className="text-2xl">{fixtures.map((f)=> (f.numberofpremiumpitches))}</p> 
+                    <p className="text-2xl">{fixtures.map((f)=> (f.number_of_premium_pitches))}</p> 
                   </div>
                   
 
@@ -109,7 +109,7 @@ function PremiumFixturesPage() {
                   <div className="bg-orange-700 text-blue-100 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Premium Pitch Applicants</p>
                     <p className="text-2xl">
-                      {pitches.filter((p) => p.premiumstatus === "Applied").length}
+                      {pitches.filter((p) => p.premium_status === "Applied").length}
                     </p>
                   </div>
 
@@ -120,8 +120,8 @@ function PremiumFixturesPage() {
                       {
                         new Set(
                           pitches
-                            .filter((p) => p.premiumstatus === "Applied")
-                            .map((p) => p.bookmakername)
+                            .filter((p) => p.premium_status === "Applied")
+                            .map((p) => p.bookmaker_name)
                         ).size
                       }
                     </p>
@@ -137,18 +137,20 @@ function PremiumFixturesPage() {
                 <th className="border px-4 py-2 text-left">Bookmaker</th>
                 <th className="border px-4 py-2 text-left">Pitch No</th>
                 <th className="border px-4 py-2 text-left">Status</th>
+                 <th className="border px-4 py-2 text-left">Last Day Used</th>
               </tr>
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchid} className={`hover:bg-red-100 ${
-                p.premiumstatus === "Applied" ? "bg-orange-200" : "bg-gray-300"
+                <tr key={p.pitch_id} className={`hover:bg-red-100 ${
+                p.premium_status === "Applied" ? "bg-orange-200" : "bg-gray-300"
                 }`} // Change background colour of the row to green if fixture.status has applied to work
                 > 
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.bookmakername}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.pitchno}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.premiumstatus}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitch_label}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.bookmaker_name}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitch_no}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.premium_status}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.last_day_used ? new Date(p.last_day_used).toLocaleDateString() : 'Not Used'}</td>
                 </tr>
               ))}
             </tbody>

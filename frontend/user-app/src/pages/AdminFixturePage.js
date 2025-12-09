@@ -84,7 +84,7 @@ function AdminFixturePage() {
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -129,7 +129,7 @@ function AdminFixturePage() {
         >
           <option value="">-- Select Racecourse --</option>
           {racecourses.map((r) => (
-            <option key={r.racecourseid} value={r.racecourseid}>
+            <option key={r.racecourse_id} value={r.racecourse_id}>
               {r.name}
             </option>
           ))}
@@ -163,12 +163,12 @@ function AdminFixturePage() {
           </thead>
           <tbody>
             {fixtures.map((f) => (
-              <tr key={f.fixtureid} className="hover:bg-gray-50">
-                <td className="border px-2 sm:px-4 py-2">{formatDate(f.fixturedate)}</td>
+              <tr key={f.fixture_id} className="hover:bg-gray-50">
+                <td className="border px-2 sm:px-4 py-2">{formatDate(f.fixture_date)}</td>
                 <td className="border px-2 sm:px-4 py-2">{f.name}</td>
                 <td className="border px-2 sm:px-4 py-2">
                   <button
-                    onClick={() => handleDeleteFixture(f.fixtureid)}
+                    onClick={() => handleDeleteFixture(f.fixture_id)}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                   >
                     Delete

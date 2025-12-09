@@ -4,36 +4,31 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom';
 import { useAuth } from "./context/AuthContext";
 import RoleBasedNavbar from "./components/RoleBasedNavbar";
-//import Navbar from './components/Navbar'
 import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
-import HomePage from './pages/HomePage';
-import AdminDashboard from './pages/AdminDashboard';
-import SisDashboard from './pages/SisDashboard';
-import BookmakerDashboard from './pages/BookmakerDashboard';
 import MyPitchesPage from "./pages/MyPitchesPage";
 import FixturesPage from "./pages/FixturesPage";
-import PremiumFixturesPage from './pages/PremiumFixturePage';
-import CorporateFixturesPage from './pages/CorporateFixturePage';
 import AttendancePage from './pages/AttendancePage';
-import PremiumPitchPage from './pages/PremiumPitchPage';
-import CorporatePitchPage from './pages/CorporatePitchPage';
-import PremiumAttendancePage from './pages/PremiumAttendancePage';
-import CorporateAttendancePage from './pages/CorporateAttendancePage';
+import AttendeesPage from './pages/AttendeesPage';
+import HriReturnsPage from './pages/HriReturnsPage';
 import AdminFixturePage from './pages/AdminFixturePage';
 import AdminBookmakerPage from './pages/AdminBookmakers';
 import AdminPitchPage from './pages/AdminPitchPage';
-import AttendeesPage from './pages/AttendeesPage';
-import PremiumAttendeesPage from './pages/PremiumAttendeesPage';
-import CorporateAttendeesPage from './pages/CorporateAttendeesPage';
-import PremiumFixtureAwarded from './pages/PremiumFixtureAwarded';
-import CorporateFixtureAwarded from './pages/CorporateFixtureAwarded';
-import HriReturnsPage from './pages/HriReturnsPage';
 import AdminPremiumPage from './pages/AdminPremiumPage';
 import AdminCorporatePage from './pages/AdminCorporatePage';
+import PremiumPitchPage from './pages/PremiumPitchPage';
+import CorporatePitchPage from './pages/CorporatePitchPage';
+import PremiumFixturesPage from './pages/PremiumFixturePage';
+import CorporateFixturesPage from './pages/CorporateFixturePage';
+import AdminPremAwardedPage from './pages/AdminPremAwardedPage';
+import AdminCorpAwardedPage from './pages/AdminCorpAwardedPage';
+import PremiumAttendeesPage from './pages/PremiumAttendeesPage';
+import CorporateAttendeesPage from './pages/CorporateAttendeesPage';
 
-//import RegisterPage from './pages/RegistrationPage';
+import PremiumFixtureAwarded from './pages/PremiumFixtureAwarded';
+import CorporateFixtureAwarded from './pages/CorporateFixtureAwarded';
 
 function App () {
   const { user } = useAuth(); // pull user (and role) from context
@@ -42,6 +37,51 @@ function App () {
   if (user === undefined) {
     return <div>Loading...</div>; 
   }
+
+ return (
+  <div className="flex flex-col min-h-screen">
+    <RoleBasedNavbar user ={user}/>
+   
+        <main className="flex-grow bg-blue-100">
+        
+            <Routes>
+              <Route path="/" element={<LoginPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/register" element={<RegistrationPage/>}/>
+              <Route path="/my-pitches" element={ <MyPitchesPage /> } />
+              <Route path="/fixtures" element={ <FixturesPage /> } />
+              <Route path="/attendance" element={ <AttendancePage /> } />
+              <Route path="/attendees" element={ <AttendeesPage /> } />
+              <Route path="/hri-returns" element={ <HriReturnsPage/> } />
+              <Route path="/admin-fixtures" element={ <AdminFixturePage /> } />
+              <Route path="/admin-bookmakers" element={ <AdminBookmakerPage /> } />
+              <Route path="/admin-pitches" element={ <AdminPitchPage /> } />
+              <Route path="/premium-area" element={ <AdminPremiumPage/> } />
+              <Route path="/corporate-area" element={ <AdminCorporatePage/> } />
+              <Route path="/my-premium-pitches" element={ <PremiumPitchPage /> } />
+              <Route path="/my-corporate-pitches" element={ <CorporatePitchPage /> } />
+              <Route path="/premium-fixtures" element={ <PremiumFixturesPage /> } />
+              <Route path="/corporate-fixtures" element={ <CorporateFixturesPage /> } />
+              <Route path="/prem-attendance" element={ <AdminPremAwardedPage /> } />
+              <Route path="/corp-attendance" element={ <AdminCorpAwardedPage /> } />
+              <Route path="/prem-attendees" element={ <PremiumAttendeesPage /> } />
+              <Route path="/corp-attendees" element={ <CorporateAttendeesPage /> } />
+              
+              <Route path="/prem-awarded" element={ <PremiumFixtureAwarded/> } />
+              <Route path="/corp-awarded" element={ <CorporateFixtureAwarded/> } />
+            </Routes>
+          
+        </main>
+    <Footer/>
+  </div>
+  
+  );
+
+}
+
+export default App;
+
 
 /* This is for testing if the user.js file can be accessed without the use of ROUTES
   const [user, setUser] = useState([])
@@ -58,6 +98,7 @@ function App () {
   },[])
 
   return (
+
     <div>
       {user.map((data)=>{
         return <>
@@ -71,57 +112,5 @@ function App () {
     </div>
   );
 }
-  */
-
- return (
-
-  <div className="flex flex-col min-h-screen">
-    <RoleBasedNavbar user ={user}/>
-   
-    <main className="flex-grow bg-blue-100">
-     
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/register" element={<RegistrationPage/>}/>
-          <Route path="/fixtures" element={ <FixturesPage /> } />
-          <Route path="/premium-fixtures" element={ <PremiumFixturesPage /> } />
-          <Route path="/corporate-fixtures" element={ <CorporateFixturesPage /> } />
-          <Route path="/my-pitches" element={ <MyPitchesPage /> } />
-          <Route path="/my-premium-pitches" element={ <PremiumPitchPage /> } />
-          <Route path="/my-corporate-pitches" element={ <CorporatePitchPage /> } />
-          <Route path="/attendance" element={ <AttendancePage /> } />
-          <Route path="/prem-attendance" element={ <PremiumAttendancePage /> } />
-          <Route path="/corp-attendance" element={ <CorporateAttendancePage /> } />
-          <Route path="/admin-fixtures" element={ <AdminFixturePage /> } />
-          <Route path="/admin-bookmakers" element={ <AdminBookmakerPage /> } />
-          <Route path="/admin-pitches" element={ <AdminPitchPage /> } />
-          <Route path="/prem-attendees" element={ <PremiumAttendeesPage /> } />
-          <Route path="/corp-attendees" element={ <CorporateAttendeesPage /> } />
-          <Route path="/attendees" element={ <AttendeesPage /> } />
-          <Route path="/prem-awarded" element={ <PremiumFixtureAwarded/> } />
-          <Route path="/corp-awarded" element={ <CorporateFixtureAwarded/> } />
-          <Route path="/hri-returns" element={ <HriReturnsPage/> } />
-          <Route path="/premium-area" element={ <AdminPremiumPage/> } />
-          <Route path="/corporate-area" element={ <AdminCorporatePage/> } />
-
-
-          <Route path="/dashboard/bookmaker" element={<BookmakerDashboard />} />
-          <Route path="/dashboard/admin" element={ <AdminDashboard />}  />
-          <Route path="/dashboard/sis" element={ <SisDashboard /> } />
-        </Routes>
-      
-    </main>
-    <Footer/>
-    
-  </div>
-  
-  );
-}
-
-
-export default App;
-
-
+*/
 

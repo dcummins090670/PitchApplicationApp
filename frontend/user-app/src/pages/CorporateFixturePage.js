@@ -38,6 +38,7 @@ function CorporateFixturesPage() {
       await fetchPitches(fixtureId);
     } else {
       setPitches([]);
+
     }
   };
     
@@ -72,25 +73,25 @@ function CorporateFixturesPage() {
         onChange={handleFixtureChange}
         className="border p-2 rounded mb-4"
         defaultValue="" >
+
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureid} value={f.fixtureid}>
-            {formatDate(f.fixturedate)} – {f.name}
+          <option key={f.fixture_id} value={f.fixture_id}>
+            {formatDate(f.fixture_date)} – {f.name}
           </option>
         ))}
+
       </select>
 
       {/*<h2 className="text-lg font-semibold mb-2">Pitches at Fixture</h2>*/}
+
 
     {loading ? (
         <p>Loading pitches...</p>
     ) : ( 
     /* Table of pitches */
       pitches.length > 0 && (
-
-      
-        
-
+  
         <div className="mt-6 overflow-x-auto">
               {/* Application Summary Section */}
               <div className="mb-6">
@@ -101,7 +102,7 @@ function CorporateFixturesPage() {
                   {/* Total Pitches */}
                   <div className="bg-red-300 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Corporate Pitches Available</p>
-                    <p className="text-2xl">{fixtures.map((f)=> (f.numberofcorporatepitches))}</p> 
+                    <p className="text-2xl">{fixtures.map((f)=> (f.number_of_corporate_pitches))}</p> 
                   </div>
                   
 
@@ -109,7 +110,7 @@ function CorporateFixturesPage() {
                   <div className="bg-red-700 text-blue-100 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Corporate Pitch Applicants</p>
                     <p className="text-2xl">
-                      {pitches.filter((p) => p.corporatestatus === "Applied").length}
+                      {pitches.filter((p) => p.corporate_status === "Applied").length}
                     </p>
                   </div>
 
@@ -120,8 +121,8 @@ function CorporateFixturesPage() {
                       {
                         new Set(
                           pitches
-                            .filter((p) => p.corporatestatus === "Applied")
-                            .map((p) => p.bookmakername)
+                            .filter((p) => p.corporate_status === "Applied")
+                            .map((p) => p.bookmaker_name)
                         ).size
                       }
                     </p>
@@ -137,6 +138,7 @@ function CorporateFixturesPage() {
                 <th className="border px-2 sm:px-4 py-2 text-left">Bookmaker</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch No</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Status</th>
+                 <th className="border px-4 py-2 text-left">Last Day Used</th>
               </tr>
             </thead>
             <tbody>
@@ -145,10 +147,11 @@ function CorporateFixturesPage() {
                 p.corporatestatus === "Applied" ? "bg-red-100" : "bg-gray-300"
                 }`} // Change background colour of the row to yellow if fixture.status has applied to work
                 > 
-                  <td className="border px-4 py-2">{p.pitchlabel}</td>
-                  <td className="border px-4 py-2">{p.bookmakername}</td>
-                  <td className="border px-4 py-2">{p.pitchno}</td>
-                  <td className="border px-4 py-2">{p.corporatestatus}</td>
+                  <td className="border px-4 py-2">{p.pitch_label}</td>
+                  <td className="border px-4 py-2">{p.bookmaker_name}</td>
+                  <td className="border px-4 py-2">{p.pitch_no}</td>
+                  <td className="border px-4 py-2">{p.corporate_status}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.last_day_used ? new Date(p.last_day_used).toLocaleDateString() : 'Not Used'}</td>
                 </tr>
               ))}
             </tbody>

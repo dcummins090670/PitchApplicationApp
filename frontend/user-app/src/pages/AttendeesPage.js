@@ -70,8 +70,8 @@ function AttendeesPage() {
         defaultValue="" >
         <option value="" disabled>-- Choose a Fixture --</option>
         {fixtures.map((f) => (
-          <option key={f.fixtureid} value={f.fixtureid}>
-            {formatDate(f.fixturedate)} – {f.name}
+          <option key={f.fixture_id} value={f.fixture_id}>
+            {formatDate(f.fixture_date)} – {f.name}
           </option>
         ))}
   </select>
@@ -109,7 +109,7 @@ function AttendeesPage() {
                       new Set(
                         pitches
                           .filter((p) => p.attendance === "Attended")
-                          .map((p) => p.bookmakername)
+                          .map((p) => p.bookmaker_name)
                       ).size
                     }
                   </p>
@@ -133,10 +133,10 @@ function AttendeesPage() {
           </thead>
           <tbody>
             {pitches.map((p) => (
-              <tr key={p.pitchid} className="hover:bg-red-200">
-                <td className="border px-4 py-2">{p.pitchlabel}</td> 
-                <td className="border px-4 py-2">{p.bookmakername}</td> 
-                <td className="border px-4 py-2">{p.pitchno}</td>               
+              <tr key={p.pitch_id} className="hover:bg-red-200">
+                <td className="border px-4 py-2">{p.pitch_label}</td> 
+                <td className="border px-4 py-2">{p.bookmaker_name}</td> 
+                <td className="border px-4 py-2">{p.pitch_no}</td>               
               </tr>
             ))}
           </tbody>

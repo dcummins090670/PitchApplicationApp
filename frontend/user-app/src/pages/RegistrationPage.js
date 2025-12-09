@@ -7,7 +7,7 @@ function RegistrationPage() {
     phone: "",
     email: "",
     password: "",
-    role_id: "",
+    role: "",
   });
   const [message, setMessage] = useState("");
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
@@ -38,7 +38,7 @@ function RegistrationPage() {
           phone: "",
           email: "",
           password: "",
-          role_id: "",
+          role: "",
         });
       } else {
         setMessage(`❌ ${data.error || data.message}`);
@@ -157,8 +157,8 @@ function RegistrationPage() {
               Role
             </label>
             <select
-              name="role_id"
-              value={formData.role_id}
+              name="role"
+              value={formData.role}
               onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded-lg px-4 py-2 sm:py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"

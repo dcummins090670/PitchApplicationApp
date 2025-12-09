@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 
 function AdminPitchPage() {
   const [racecourses, setRacecourses] = useState([]);
-  const [racecourseId] = useState("");
+  const [racecourseId, setRacecourseId] = useState("");
   const [pitches, setPitches] = useState([]);
   const [bookmakers, setBookmakers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [message] = useState("");
+  const [message, setMessage] = useState("");
   const [selectedOwners, setSelectedOwners] = useState({});   // { [pitchId]: permitNo }
   const [transferValues, setTransferValues] = useState({});   // { [pitchId]: "123.45" }
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
@@ -72,7 +72,7 @@ function AdminPitchPage() {
 
   const handleRacecourseChange = async (e) => {
     const racecourseId = e.target.value;
-    //setRacecourseId(racecourseId);
+    setRacecourseId(racecourseId);
     if (racecourseId) {
       await fetchPitches(racecourseId);
     } else {
@@ -114,8 +114,8 @@ function AdminPitchPage() {
       const data = await response.json();
 
       if (!response.ok) throw new Error(data.error || "Failed to update transfer");
-
-      //setMessage(data.message);
+      //setMessage("Pitch transfer saved successfully!");
+      setMessage(data.message);
       await fetchPitches(racecourseId); // make sure racecourseId is set when selecting
       // optional: clear inputs for that row
         setSelectedOwners(prev => ({ ...prev, [pitchId]: "" }));
@@ -134,7 +134,7 @@ function AdminPitchPage() {
         className="border p-2 rounded mb-4">
         <option value="">Select Racecourse</option>
         {racecourses.map((r) => (
-          <option key={r.racecourseid} value={r.racecourseid}>
+          <option key={r.racecourse_id} value={r.racecourse_id}>
             {r.name}
           </option>
         ))}
@@ -163,21 +163,21 @@ function AdminPitchPage() {
         </thead>
         <tbody>
           {pitches.map((p) => (
-            <tr key={p.pitchid} className="hover:bg-gray-50">
-              <td className="border px-2 sm:px-4 py-2">{p.pitchlabel}</td>
+            <tr key={p.pitch_id} className="hover:bg-gray-50">
+              <td className="border px-2 sm:px-4 py-2">{p.pitch_label}</td>
               <td className="border px-2 sm:px-4 py-2">{p.name}</td>
               <td className="border px-2 sm:px-4 py-2">
                 <select
-                  value={selectedOwners[p.pitchid] ?? ""}  // controlled
+                  value={selectedOwners[p.pitch_id] ?? ""}  // controlled
                   onChange={(e) =>
-                    setSelectedOwners(prev => ({ ...prev, [p.pitchid]: e.target.value }))
+                    setSelectedOwners(prev => ({ ...prev, [p.pitch_id]: e.target.value }))
                     //handlePitchTransfer(p.pitchId, e.target.value)
                   }
                 >
                   <option value="">Select Bookmaker</option>
                   {bookmakers.map((b) => (
-                    <option key={b.permitno} value={b.permitno}>
-                      {b.name} ({b.permitno})
+                    <option key={b.permit_no} value={b.permit_no}>
+                      {b.name} ({b.permit_no})
                     </option>
                   ))}
                 </select>
@@ -186,21 +186,21 @@ function AdminPitchPage() {
                 <input
                   type="number"
                   placeholder="€"
-                  value={transferValues[p.pitchid] || ""}
+                  value={transferValues[p.pitch_id] || ""}
                   onChange={(e) => 
-                  setTransferValues(prev => ({ ...prev, [p.pitchid]: e.target.value })) 
+                  setTransferValues(prev => ({ ...prev, [p.pitch_id]: e.target.value })) 
                   //handleValueChange(p.pitchId, e.target.value)
                   }
                 />
               </td>
               <td>
                 <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                disabled={!selectedOwners[p.pitchid]} // prevent null owner
+                disabled={!selectedOwners[p.pitch_id]} // prevent null owner
                   onClick={() =>
                     handlePitchTransfer(
-                      p.pitchid,
-                      selectedOwners[p.pitchid],
-                      transferValues[p.pitchid]
+                      p.pitch_id,
+                      selectedOwners[p.pitch_id],
+                      transferValues[p.pitch_id]
                       //p.newOwnerPermitNo // set in dropdown
                     )
                   }
