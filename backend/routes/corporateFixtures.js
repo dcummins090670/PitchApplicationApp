@@ -6,7 +6,7 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 // Update corporateArea for a fixture (Admin only)
     router.put('/:fixtureId/corporateArea',authenticateToken,authorizeRoles('admin'),async (req, res) => {
         const { fixtureId } = req.params;
-        const { corporateAreaAvailable } = req.body;
+        const { corporateAreaAvailable, numberOfCorporatePitches} = req.body;
         
         try {
             // Get fixture date
@@ -25,15 +25,17 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
         // Build dynamic SQL based on what fields are provided
                 const updates = [];
                 const params = [];
-
+                let paramIndex = 1;
                 if (corporateAreaAvailable !== undefined) {
-                    updates.push('corporate_area_available = $1');
+                    updates.push(`corporate_area_available = $${paramIndex}`);
                     params.push(corporateAreaAvailable);
+                    paramIndex++;
                 }
 
                 if (numberOfCorporatePitches !== undefined) {
-                    updates.push('number_of_corporate_pitches = $2');
+                    updates.push(`number_of_corporate_pitches = $${paramIndex}`);
                     params.push(numberOfCorporatePitches);
+                    paramIndex++;
                 }
 
                 if (updates.length === 0) {
@@ -42,9 +44,11 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 
                 params.push(fixtureId); // Add fixtureId for WHERE clause
 
+                const whereIndex = params.length;
+
                 // Insert new row if not exists, else update
                 await db.query(
-                `UPDATE fixture SET ${updates.join(', ')} WHERE fixture_id = $3`,
+                `UPDATE fixture SET ${updates.join(', ')} WHERE fixture_id = $${whereIndex}`,
                 params
             );
 
@@ -56,9 +60,8 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
             console.error(err);
             res.status(500).json({ error: err});
         }
-
     }
-);      
+);  
  
 // Get all corporate fixtures with racecourse name
     router.get('/', async (req, res) => {
@@ -124,7 +127,7 @@ router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker
         res.json(results);
 
     } catch (err) {
-        console.error("Error fetching premium pitches:", err);
+        console.error("Error fetching corporate pitches:", err);
         res.status(500).json({error:err.message});
     }    
 

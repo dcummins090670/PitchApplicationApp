@@ -23,20 +23,22 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
             const fixtureRows = fixture.rows;
             if (fixtureRows.length === 0) {
             return res.status(404).json({ error: 'Fixture not found' });
-        }
+            }
 
             // Build dynamic SQL based on what fields are provided
                 const updates = [];
                 const params = [];
-
+                let paramIndex = 1;
                 if (premiumAreaAvailable !== undefined) {
-                    updates.push('premium_area_available = $1');
+                    updates.push(`premium_area_available = $${paramIndex}`);
                     params.push(premiumAreaAvailable);
+                    paramIndex++;
                 }
 
                 if (numberOfPremiumPitches !== undefined) {
-                    updates.push('number_of_premium_pitches = $2');
+                    updates.push(`number_of_premium_pitches = $${paramIndex}`);
                     params.push(numberOfPremiumPitches);
+                    paramIndex++;
                 }
 
                 if (updates.length === 0) {
@@ -45,9 +47,11 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 
                 params.push(fixtureId); // Add fixtureId for WHERE clause
 
+                const whereIndex = params.length;
+
                 // Insert new row if not exists, else update
                 await db.query(
-                `UPDATE fixture SET ${updates.join(', ')} WHERE fixture_id = $3`,
+                `UPDATE fixture SET ${updates.join(', ')} WHERE fixture_id = $${whereIndex}`,
                 params
             );
 
@@ -65,7 +69,7 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 
 // Get all premium fixtures with racecourse name
     router.get('/', async (req, res) => {
-        const fixtureId = req.params.fixtureId;
+        //const fixtureId = req.params.fixtureId;
    
          try {
              const result = await db.query(
@@ -134,90 +138,90 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 });
 
 
-// Update pitch status for a fixture (Bookmaker version with time rules) - Used when bookmker select a meeting to indicate status - "Applying/Not Applying)"
-router.put('/my-premium-pitches/:fixtureId/:pitchId/:racecourseId/premium-status',authenticateToken,authorizeRoles('bookmaker'),async (req, res) => {
-        const { fixtureId, pitchId, racecourseId } = req.params;
-        const { premiumStatus } = req.body;
-        const permitNo = req.user.permitNo; // from JWT
+    // Update pitch status for a fixture (Bookmaker version with time rules) - Used when bookmker select a meeting to indicate status - "Applying/Not Applying)"
+    router.put('/my-premium-pitches/:fixtureId/:pitchId/:racecourseId/premium-status',authenticateToken,authorizeRoles('bookmaker'),async (req, res) => {
+            const { fixtureId, pitchId, racecourseId } = req.params;
+            const { premiumStatus } = req.body;
+            const permitNo = req.user.permitNo; // from JWT
 
-        const validStatuses = ['Not Applying', 'Applied'];
-        if (!validStatuses.includes(premiumStatus)) {
-            return res.status(400).json({ error: 'Invalid status for bookmaker' });
-        }
-
-        try {
-            // Get fixture date for time checks
-            const fixture = await db.query(
-                `SELECT f.fixture_date
-                 FROM fixture f
-                 JOIN pitch p ON p.racecourse_id = f.racecourse_id
-                 WHERE f.fixture_id = $1 AND p.pitch_id = $2 AND p.racecourse_id = $3 AND p.owner_permit_no = $4`,
-                [fixtureId, pitchId, racecourseId, permitNo]
-            );
-            const fixtureRows = fixture.rows;
-            if (fixtureRows.length === 0) {
-                return res.status(404).json({ error: 'Fixture or pitch not found for this bookmaker' });
+            const validStatuses = ['Not Applying', 'Applied'];
+            if (!validStatuses.includes(premiumStatus)) {
+                return res.status(400).json({ error: 'Invalid status for bookmaker' });
             }
 
-            const fixtureDate = new Date(fixtureRows[0].fixture_date);
-            const now = new Date();
-
-            // Time rules
-            if (premiumStatus === 'Applied') {
-                // Must be at least 7 days before fixture
-                const minApplyDate = new Date(fixtureDate);
-                minApplyDate.setDate(minApplyDate.getDate() - 2);
-                if (now > minApplyDate) {
-                    return res.status(400).json({
-                        error: 'You must apply at least 2 days before the fixture date'
-                    });
-                }
-            }
-
-            if (premiumStatus === 'Not Applying') {
-                // Must be before 9am on fixture date
-                const deadline = new Date(fixtureDate);
-                deadline.setHours(9, 0, 0, 0);
-                if (now > deadline) {
-                    return res.status(400).json({
-                        error: 'You can only change to Not Working before 9am on fixture day'
-                    });
-                }
-            }
-
-            // Ensure FixturePitchStatus record exists
-            const result = await db.query(
-                `SELECT * FROM premium_fixture_pitch WHERE fixture_id = $1 AND pitch_id = $2 AND racecourse_id = $3`,
-                [fixtureId, pitchId, racecourseId]
-            );
-            const existing = result.rows;
-            if (existing.length === 0) {
-                // Create it if not found
-                await db.query(
-                    `INSERT INTO premium_fixture_pitch (fixture_id, pitch_id, racecourse_id, permit_no, premium_status, updated_at)
-                     VALUES ($1, $2, $3, $4, $5, NOW())`,
-                    [fixtureId, pitchId, racecourseId, permitNo, premiumStatus]
+            try {
+                // Get fixture date for time checks
+                const fixture = await db.query(
+                    `SELECT f.fixture_date
+                    FROM fixture f
+                    JOIN pitch p ON p.racecourse_id = f.racecourse_id
+                    WHERE f.fixture_id = $1 AND p.pitch_id = $2 AND p.racecourse_id = $3 AND p.owner_permit_no = $4`,
+                    [fixtureId, pitchId, racecourseId, permitNo]
                 );
-            } else {
-                // Update existing
-                await db.query(
-                    `UPDATE premium_fixture_pitch
-                     SET premium_status = $4, updated_at = NOW()
-                     WHERE fixture_id = $1 AND pitch_id = $2 AND racecourse_id = $3`,
-                    [fixtureId, pitchId, racecourseId, premiumStatus]
+                const fixtureRows = fixture.rows;
+                if (fixtureRows.length === 0) {
+                    return res.status(404).json({ error: 'Fixture or pitch not found for this bookmaker' });
+                }
+
+                const fixtureDate = new Date(fixtureRows[0].fixture_date);
+                const now = new Date();
+
+                // Time rules
+                if (premiumStatus === 'Applied') {
+                    // Must be at least 7 days before fixture
+                    const minApplyDate = new Date(fixtureDate);
+                    minApplyDate.setDate(minApplyDate.getDate() - 2);
+                    if (now > minApplyDate) {
+                        return res.status(400).json({
+                            error: 'You must apply at least 2 days before the fixture date'
+                        });
+                    }
+                }
+
+                if (premiumStatus === 'Not Applying') {
+                    // Must be before 9am on fixture date
+                    const deadline = new Date(fixtureDate);
+                    deadline.setHours(9, 0, 0, 0);
+                    if (now > deadline) {
+                        return res.status(400).json({
+                            error: 'You can only change to Not Working before 9am on fixture day'
+                        });
+                    }
+                }
+
+                // Ensure FixturePitchStatus record exists
+                const result = await db.query(
+                    `SELECT * FROM premium_fixture_pitch WHERE fixture_id = $1 AND pitch_id = $2 AND racecourse_id = $3`,
+                    [fixtureId, pitchId, racecourseId]
                 );
+                const existing = result.rows;
+                if (existing.length === 0) {
+                    // Create it if not found
+                    await db.query(
+                        `INSERT INTO premium_fixture_pitch (fixture_id, pitch_id, racecourse_id, permit_no, premium_status, updated_at)
+                        VALUES ($1, $2, $3, $4, $5, NOW())`,
+                        [fixtureId, pitchId, racecourseId, permitNo, premiumStatus]
+                    );
+                } else {
+                    // Update existing
+                    await db.query(
+                        `UPDATE premium_fixture_pitch
+                        SET premium_status = $4, updated_at = NOW()
+                        WHERE fixture_id = $1 AND pitch_id = $2 AND racecourse_id = $3`,
+                        [fixtureId, pitchId, racecourseId, premiumStatus]
+                    );
+                }
+
+                res.json({
+                    message: `Status updated to '${premiumStatus}' for your pitch ${pitchId} at racecourse ${racecourseId} in fixture ${fixtureId}`
+                });
+
+            } catch (err) {
+                console.error(err);
+                res.status(500).json({ error: err.message });
             }
-
-            res.json({
-                message: `Status updated to '${premiumStatus}' for your pitch ${pitchId} at racecourse ${racecourseId} in fixture ${fixtureId}`
-            });
-
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: err.message });
         }
-    }
-);
+    );
 
 
 
@@ -262,7 +266,7 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
         r.racecourse_id,
         f.number_of_premium_pitches,
         COALESCE(pfp.premium_status, 'Not Applying') AS premium_status,
-        COALESCE(pfp.location, 'Main Ring') AS location
+        COALESCE(pfp.location, 'Main Ring') AS location,
         (SELECT MAX(pa.attended_at) FROM premium_attendance pa WHERE pa.pitch_id = p.pitch_id) AS last_day_used
        FROM pitch p
        JOIN users u ON u.permit_no = p.owner_permit_no
@@ -392,7 +396,7 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
                         JOIN premium_attendance pa
                                 ON pa.pitch_id = p.pitch_id AND pa.fixture_id = f.fixture_id            
                         WHERE r.racecourse_id = $1
-                        ORDER BY f.fixture_date ASC`,
+                        ORDER BY f.fixture_date DESC`,
                         [racecourseId]
                     );
                     const results = result.rows;        
@@ -403,7 +407,7 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
                 }
     });
     
-
+/*
 // Get attended pitches for a specific fixture
     router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         const { fixtureId } = req.params;
@@ -504,5 +508,5 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
     }
 );    
    
-
+*/
 module.exports = router;

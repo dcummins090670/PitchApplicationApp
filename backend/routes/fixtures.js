@@ -28,7 +28,7 @@ router.get('/my-pitches', authenticateToken, authorizeRoles('bookmaker'), async 
                 ON fps.fixture_id = f.fixture_id	
                 AND fps.pitch_id = p.pitch_id	
                 AND fps.permit_no = u.permit_no 
-            WHERE u.permit_no = $1 AND f.fixture_date >= CURRENT_DATE
+            WHERE u.permit_no = $1 
             AND f.fixture_date >= CURRENT_DATE
             ORDER BY f.fixture_date`,	
             [permitNo]	
