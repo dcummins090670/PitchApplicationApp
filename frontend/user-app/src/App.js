@@ -26,9 +26,9 @@ import AdminPremAwardedPage from './pages/AdminPremAwardedPage';
 import AdminCorpAwardedPage from './pages/AdminCorpAwardedPage';
 import PremiumAttendeesPage from './pages/PremiumAttendeesPage';
 import CorporateAttendeesPage from './pages/CorporateAttendeesPage';
-
 import PremiumFixtureAwarded from './pages/PremiumFixtureAwarded';
 import CorporateFixtureAwarded from './pages/CorporateFixtureAwarded';
+import AdminAreaTestPage from './pages/AdminAreaTestPage';
 
 function App () {
   const { user } = useAuth(); // pull user (and role) from context
@@ -67,9 +67,9 @@ function App () {
               <Route path="/corp-attendance" element={ <AdminCorpAwardedPage /> } />
               <Route path="/prem-attendees" element={ <PremiumAttendeesPage /> } />
               <Route path="/corp-attendees" element={ <CorporateAttendeesPage /> } />
-              
               <Route path="/prem-awarded" element={ <PremiumFixtureAwarded/> } />
               <Route path="/corp-awarded" element={ <CorporateFixtureAwarded/> } />
+              <Route path="/test" element={ <AdminAreaTestPage/> } />
             </Routes>
           
         </main>

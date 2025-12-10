@@ -83,7 +83,7 @@ function CorporateAttendeesPage() {
         
         <table className="hidden sm:table border-separate bg-red-100 rounded-lg w-full">
           <thead>
-            <tr className="text-white bg-red-600">
+            <tr className="text-white bg-red-700">
               <th className="border px-2 sm:px-4 py-2 text-left">Fixture Date</th>
               <th className="border px-2 sm:px-4 py-2 text-left">Bookmaker</th>
               <th className="border px-2 sm:px-4 py-2 text-left">Location</th>

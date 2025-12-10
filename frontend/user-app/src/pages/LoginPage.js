@@ -47,7 +47,7 @@ function LoginPage() {
       } else if (data.role === "sis") {
         navigate("/attendance");
       } else if (data.role === "admin") {
-        navigate("/attendees");
+        navigate("/attendance");
       }
       
     } catch (err) {

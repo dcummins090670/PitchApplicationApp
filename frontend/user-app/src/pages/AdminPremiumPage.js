@@ -124,7 +124,7 @@ const handleNumberOfPitches = async (fixtureId, newValue) => {
 
  return (
   <div className="p-4">
-          <h1 className="text-xl font-bold p-2 mb-4">Update Premium Area Fixtures</h1>
+          <h1 className="text-xl font-bold p-2 mb-4">Update Premium Area Details</h1>
     {loading ? (
       <p>Loading fixtures...</p>
     ) : fixtures.length > 0 ? (

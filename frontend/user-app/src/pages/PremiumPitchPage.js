@@ -100,7 +100,7 @@ function PremiumPitchPage() {
           </thead>
           <tbody>
             {fixtures.map((fixture, index) => (
-            <tr key={index} className={`hover:bg-gray-100 ${
+            <tr key={index} className={`hover:bg-gray-200 ${
               fixture.premium_status === "Applied" ? "bg-orange-200" : "bg-gray-300"
             }`} // Change background colour of the row to orange if fixture.status has applied to work
             >

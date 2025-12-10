@@ -102,7 +102,7 @@ function CorporateFixturesPage() {
                   {/* Total Pitches */}
                   <div className="bg-red-300 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Corporate Pitches Available</p>
-                    <p className="text-2xl">{fixtures.map((f)=> (f.number_of_corporate_pitches))}</p> 
+                    <p className="text-2xl">{pitches[0]?.number_of_corporate_pitches || 0}</p> 
                   </div>
                   
 
@@ -133,7 +133,7 @@ function CorporateFixturesPage() {
 
           <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
             <thead>
-              <tr className="text-white bg-red-600">
+              <tr className="text-white bg-red-800">
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch Label</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Bookmaker</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch No</th>
@@ -143,8 +143,8 @@ function CorporateFixturesPage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchid} className={`hover:bg-gray-50 ${
-                p.corporatestatus === "Applied" ? "bg-red-100" : "bg-gray-300"
+                <tr key={p.pitchid} className={`hover:bg-gray-200 ${
+                p.corporatestatus === "Applied" ? "bg-red-200" : "bg-gray-300"
                 }`} // Change background colour of the row to yellow if fixture.status has applied to work
                 > 
                   <td className="border px-4 py-2">{p.pitch_label}</td>

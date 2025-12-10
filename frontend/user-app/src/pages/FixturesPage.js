@@ -3,7 +3,7 @@ import { formatDate } from "../utils/dateUtils";
 
 function FixturesPage() {
   const [fixtures, setFixtures] = useState([]);
-  //const [selectedFixture, setSelectedFixture] = useState("");
+  const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
   // to allow for testing locally and online
@@ -35,7 +35,8 @@ function FixturesPage() {
     
    const handleFixtureChange = async (e) => {
     const fixtureId = e.target.value;
-    //const fixture = fixtures.find(f => f.fixtureId === parseInt(fixtureId));
+    const fixture = fixtures.find((f) => f.fixture_id.toString() === fixtureId);
+    setSelectedFixture(fixture || null);
    //await fetchPitches(fixtureId);
     if (fixtureId) {
       await fetchPitches(fixtureId);
@@ -98,8 +99,8 @@ function FixturesPage() {
             <div className="mt-6 overflow-x-auto">
               {/* Application Summary Section */}
               <div className="mb-6">
-                <h2 className="text-2xl font-bold mb-3">Applicants Summary</h2>
-
+                 {/*<h2 className="text-2xl font-bold mb-3">Applicants Summary</h2>*/}
+                <h2 className="text-2xl font-bold mb-3 flex justify-center items-center"> Pitch List - {selectedFixture.name} ({formatDate(selectedFixture.fixture_date)})</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* Total Pitches */}
                   <div className="bg-blue-600 text-blue-100 p-4 rounded-xl shadow">
@@ -147,7 +148,7 @@ function FixturesPage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitch_id} className={`hover:bg-red-200 ${
+                <tr key={p.pitch_id} className={`hover:bg-gray-200 ${
                 p.status === "Applied" ? "bg-green-300" : "bg-gray-300"
                 }`} // Change background colour of the row to green if fixture.status has applied to work
                 > 

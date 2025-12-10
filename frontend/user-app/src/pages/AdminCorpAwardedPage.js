@@ -190,7 +190,7 @@ function AdminCorpAwardedPage() {
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Bookmaker</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Pitch No</th>
-                <th className="border px-2 sm:px-4 py-2 text-left">Status</th>
+                <th className="border px-2 sm:px-4 py-2 text-left">Last Day Used</th>
                 <th className="border px-2 sm:px-4 py-2 text-left">Select Corporate Pitches</th>
               </tr>
             </thead>
@@ -203,7 +203,7 @@ function AdminCorpAwardedPage() {
                   <td className="border px-2 sm:px-4 py-2">{p.pitch_label}</td>
                   <td className="border px-2 sm:px-4 py-2">{p.bookmaker_name}</td>
                   <td className="border px-2 sm:px-4 py-2">{p.pitch_no}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.corporate_status}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.last_day_used ? new Date(p.last_day_used).toLocaleDateString() : 'Not Used'}</td>
                   <td className="border px-2 sm:px-4 py-2">
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input

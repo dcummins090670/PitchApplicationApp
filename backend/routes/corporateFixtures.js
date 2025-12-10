@@ -6,7 +6,10 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 // Update corporateArea for a fixture (Admin only)
     router.put('/:fixtureId/corporateArea',authenticateToken,authorizeRoles('admin'),async (req, res) => {
         const { fixtureId } = req.params;
-        const { corporateAreaAvailable, numberOfCorporatePitches} = req.body;
+        const { corporateAreaAvailable, numberOfCorporatePitches } = req.body;
+
+        //const { numberOfCorporatePitches } = req.body; 
+        
         
         try {
             // Get fixture date
@@ -65,7 +68,7 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
  
 // Get all corporate fixtures with racecourse name
     router.get('/', async (req, res) => {
-        const fixtureId = req.params.fixtureId;
+        //const fixtureId = req.params.fixtureId;
    
          try {
              const result = await db.query(
@@ -91,47 +94,47 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 
 
 // Get fixtures + pitches for the logged-in bookmaker
-router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {    
-    const permitNo = req.user.permitNo; // from JWT
+    router.get('/my-corporate-pitches', authenticateToken, authorizeRoles('bookmaker'), async (req, res) => {    
+        const permitNo = req.user.permitNo; // from JWT
 
-    try {
-        const result 
-        = await db.query (
-            `SELECT 
-                f.fixture_id,
-                f.corporate_area_available,
-                CAST(f.fixture_date AS DATE) AS fixture_date,
-                r.racecourse_id,
-                r.name AS racecourse_name,
-                p.pitch_id,
-                p.pitch_label,
-                p.pitch_no,
-            COALESCE(cfp.corporate_status, 'Not Applying') AS corporate_status   
-            FROM users u
-            JOIN pitch p 
-                ON u.permit_no = p.owner_permit_no
-            JOIN racecourse r 
-                ON p.racecourse_id = r.racecourse_id
-            JOIN fixture f
-                ON r.racecourse_id = f.racecourse_id                
-            LEFT JOIN corporate_fixture_pitch cfp
-                ON cfp.fixture_id = f.fixture_id
-                AND cfp.pitch_id = p.pitch_id
-                AND cfp.permit_no = u.permit_no    
-            WHERE u.permit_no = $1  AND f.corporate_area_available = TRUE AND f.fixture_date >= CURRENT_DATE 
-            ORDER BY f.fixture_date`,
-            [permitNo]
-        );
-    // Left Join with FixturePitchStatus ensures we always see a row, even if no status has been set yet. WHERE u.permitNo = ?  AND f.fixtureDate >= CURDATE() AND f.corporateAreaAvailable = TRUE
-        const results = result.rows;
-        res.json(results);
+        try {
+            const result 
+            = await db.query (
+                `SELECT 
+                    f.fixture_id,
+                    f.corporate_area_available,
+                    CAST(f.fixture_date AS DATE) AS fixture_date,
+                    r.racecourse_id,
+                    r.name AS racecourse_name,
+                    p.pitch_id,
+                    p.pitch_label,
+                    p.pitch_no,
+                COALESCE(cfp.corporate_status, 'Not Applying') AS corporate_status   
+                FROM users u
+                JOIN pitch p 
+                    ON u.permit_no = p.owner_permit_no
+                JOIN racecourse r 
+                    ON p.racecourse_id = r.racecourse_id
+                JOIN fixture f
+                    ON r.racecourse_id = f.racecourse_id                
+                LEFT JOIN corporate_fixture_pitch cfp
+                    ON cfp.fixture_id = f.fixture_id
+                    AND cfp.pitch_id = p.pitch_id
+                    AND cfp.permit_no = u.permit_no    
+                WHERE u.permit_no = $1  AND f.corporate_area_available = TRUE AND f.fixture_date >= CURRENT_DATE 
+                ORDER BY f.fixture_date`,
+                [permitNo]
+            );
+        // Left Join with FixturePitchStatus ensures we always see a row, even if no status has been set yet. WHERE u.permitNo = ?  AND f.fixtureDate >= CURDATE() AND f.corporateAreaAvailable = TRUE
+            const results = result.rows;
+            res.json(results);
 
-    } catch (err) {
-        console.error("Error fetching corporate pitches:", err);
-        res.status(500).json({error:err.message});
-    }    
+        } catch (err) {
+            console.error("Error fetching corporate pitches:", err);
+            res.status(500).json({error:err.message});
+        }    
 
-});
+    });
 
 // Update pitch status for a fixture (Bookmaker version with time rules) - Used when bookmker select a meeting to indicate status - "Working/Not Working)"
 
@@ -262,7 +265,7 @@ router.get('/:fixtureId/corporate-pitches', async (req, res) => {
         r.racecourse_id,
         f.number_of_corporate_pitches,
         COALESCE(cfp.corporate_status, 'Not Applying') AS corporate_status,
-        COALESCE(cfp.location, 'Main Ring') AS location
+        COALESCE(cfp.location, 'Main Ring') AS location,
         (SELECT MAX(ca.attended_at) FROM corporate_attendance ca WHERE ca.pitch_id = p.pitch_id) AS last_day_used
        FROM pitch p
        JOIN users u ON u.permit_no = p.owner_permit_no
@@ -283,7 +286,7 @@ router.get('/:fixtureId/corporate-pitches', async (req, res) => {
 });
 
 // Update pitch location for a fixture (SIS/Admin only)
-    router.put('/:fixtureId/:pitchId/:racecourseId/attendance',authenticateToken,authorizeRoles('admin'),async (req, res) => {
+    router.put('/:fixtureId/:pitchId/:racecourseId/status',authenticateToken,authorizeRoles('admin'),async (req, res) => {
         const { fixtureId, pitchId, racecourseId } = req.params;
         const { location } = req.body;      
     
@@ -337,7 +340,7 @@ router.post("/:fixtureId/attendance-list", async (req, res) => {
               // Insert all attendees
             for (const a of attendees) {
             await db.query(
-                `INSERT INTO corporate_attendance (fixture_id, pitch_id, bookmaker_permit_no, attendedat)
+                `INSERT INTO corporate_attendance (fixture_id, pitch_id, bookmaker_permit_no, attended_at)
                 VALUES ($1, $2, $3, NOW())`,
                 [fixtureId, a.pitchId, a.bookmakerPermitNo]
             );
@@ -391,7 +394,7 @@ router.post("/:fixtureId/attendance-list", async (req, res) => {
                     JOIN corporate_attendance ca
                             ON ca.pitch_id = p.pitch_id AND ca.fixture_id = f.fixture_id            
                     WHERE r.racecourse_id = $1
-                    ORDER BY f.fixture_date ASC`,
+                    ORDER BY f.fixture_date DESC`,
                     [racecourseId]
                 );
                 const results = result.rows;        
@@ -402,45 +405,45 @@ router.post("/:fixtureId/attendance-list", async (req, res) => {
             }
         });
     
-    
 // Get attended pitches for a specific fixture
-router.get('/:fixtureId/awarded-pitches', async (req, res) => {
-  const { fixtureId } = req.params;
+    router.get('/:fixtureId/awarded-pitches', async (req, res) => {
+        const { fixtureId } = req.params;
 
-  try {
-    const result = await db.query(
-      `SELECT 
-        p.pitch_id, 
-        p.pitch_label, 
-        p.pitch_no, 
-        u.name AS bookmaker_name,
-        u.permit_no,
-        r.name AS racecourse,
-        r.racecourseId,
-        CAST(f.fixture_date AS DATE) AS fixture_date,
-        COALESCE(cfp.location, 'Main Ring') AS location,
-        COALESCE(cfp.corporate_status, 'Not Applying') AS corporate_status
-       FROM pitch p
-       JOIN users u ON u.permit_no = p.owner_permit_no
-       JOIN fixture f ON f.racecourse_id = p.racecourse_id
-       JOIN racecourse r ON r.racecourse_id = f.racecourse_id
-       LEFT JOIN corporate_fixture_pitch cfp
-              ON cfp.pitch_id = p.pitch_id AND cfp.fixture_id = f.fixture_id
-       WHERE f.fixture_id = $1 AND u.name !='Vacant' AND cfp.location ='Main Ring & Corporate Area'
-       ORDER BY p.pitch_id`,
-      [fixtureId]
-    );
-    const results = result.rows;
-    res.json(results);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch pitches' });
-  }
-});
+        try {
+            const result = await db.query(
+            `SELECT 
+                    p.pitch_id, 
+                    p.pitch_label, 
+                    p.pitch_no, 
+                    u.name AS bookmaker_name,
+                    u.permit_no,
+                    r.name AS racecourse,
+                    r.racecourseId,
+                    CAST(f.fixture_date AS DATE) AS fixture_date,
+                    COALESCE(cfp.location, 'Main Ring') AS location,
+                    COALESCE(cfp.corporate_status, 'Not Applying') AS corporate_status
+            FROM pitch p
+            JOIN users u ON u.permit_no = p.owner_permit_no
+            JOIN fixture f ON f.racecourse_id = p.racecourse_id
+            JOIN racecourse r ON r.racecourse_id = f.racecourse_id
+            LEFT JOIN corporate_fixture_pitch cfp
+                    ON cfp.pitch_id = p.pitch_id AND cfp.fixture_id = f.fixture_id
+            WHERE f.fixture_id = $1 AND u.name !='Vacant' AND cfp.location ='Main Ring & Corporate Area'
+            ORDER BY p.pitch_id`,
+            [fixtureId]
+            );
+            const results = result.rows;
+            res.json(results);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to fetch pitches' });
+        }
+    });
 
- 
+module.exports = router; 
 
-   // Add new fixture
+/* 
+// Add new fixture
     router.post('/', authenticateToken, authorizeRoles('admin'), async (req, res) => {
         const { fixtureDate, racecourseId } = req.body;
          try {
@@ -467,52 +470,6 @@ router.get('/:fixtureId/awarded-pitches', async (req, res) => {
             }
         });
 
-    
-
-
-// Update corporateArea for a fixture (Admin only)
-    router.put('/:fixtureId/corporatePitches',authenticateToken,authorizeRoles('admin'),async (req, res) => {
-        const { fixtureId } = req.params;
-        const { numberOfcorporatePitches } = req.body;      
-    
-
-        try {
-            // Get fixture date
-            const fixture = await db.query(
-                `SELECT *
-                    FROM fixture f
-                    JOIN racecourse r ON r.racecourse_id = f.racecourse_id
-                    WHERE f.fixture_id = $1`,
-                [fixtureId]
-            );
-            const fixtureRows = fixture.rows;
-            if (fixtureRows.length === 0) {
-            return res.status(404).json({ error: 'Fixture not found' });
-        }
-
-            // Insert new row if not exists, else update
-             await db.query(
-                `UPDATE fixture 
-                 SET number_of_corporate_pitches = $2
-                 WHERE fixture_id = $1`,
-                [fixtureId , numberOfcorporatePitches]
-            );
-            
-            res.json({message: `Corporate Area Avaiable updated to '${numberOfcorporatePitches}' in Fixture ${fixtureId}` });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: err});
-        }
-    }
-);    
-   
-    
-  
-
-module.exports = router;
-
-// DATE_FORMAT(f.fixtureDate, '%Y-%m-%d') AS fixtureDate,
-// CAST(f.fixtureDate AS DATE) AS fixtureDate,
 
 // WHERE f.fixtureDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 28 DAY)
-// WHERE f.fixtureDate >= CURRENT_DATE  
+*/

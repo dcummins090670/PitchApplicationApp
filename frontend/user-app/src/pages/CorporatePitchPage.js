@@ -90,7 +90,7 @@ function CorporatePitchPage() {
       <div className="overflow-x-auto">
         <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
           <thead>
-            <tr className="text-white bg-red-600">
+            <tr className="text-white bg-red-800">
               <th className="border px-2 sm:px-4 py-2 text-left">Date</th>
               <th className="border px-2 sm:px-4 py-2 text-left">Racecourse</th>
               <th className="border px-2 sm:px-4 py-2 text-left">Location</th>
@@ -100,8 +100,8 @@ function CorporatePitchPage() {
           </thead>
           <tbody>
             {fixtures.map((fixture, index) => (
-            <tr key={index} className={`hover:bg-gray-100 ${
-              fixture.corporate_status === "Applied" ? "bg-red-100" : "bg-gray-300"
+            <tr key={index} className={`hover:bg-gray-200 ${
+              fixture.corporate_status === "Applied" ? "bg-red-300" : "bg-gray-300"
             }`} // Change background colour of the row to orange if fixture.status has applied to work
             >
                 <td className="border px-2 sm:px-4 py-2">{formatDate(fixture.fixture_date)}</td>

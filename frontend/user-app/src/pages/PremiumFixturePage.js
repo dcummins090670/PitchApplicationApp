@@ -101,7 +101,7 @@ function PremiumFixturesPage() {
                   {/* Total Pitches */}
                   <div className="bg-orange-400 p-4 rounded-xl shadow">
                     <p className="text-2xl font-bold">Premium Pitches Available</p>
-                    <p className="text-2xl">{fixtures.map((f)=> (f.number_of_premium_pitches))}</p> 
+                    <p className="text-2xl">{pitches[0]?.number_of_premium_pitches || 0}</p> 
                   </div>
                   
 

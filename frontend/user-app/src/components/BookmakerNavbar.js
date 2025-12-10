@@ -22,25 +22,25 @@ function BookmakerNavBar() {
       name: "Pitches",
       links: [
         { label: "Apply to Work", to: "/my-pitches" },
-        { label: "List of Applicants", to: "/fixtures" },
+        { label: "Fixture: Pitch List", to: "/fixtures" },
         { label: "Attendance List", to: "/attendees" },
       ],
     },
     {
       name: "Premium Area",
       links: [
-        { label: "Premium Application", to: "/my-premium-pitches" },
-        { label: "List of Applicants", to: "/premium-fixtures" },
-        { label: "Applicants Awarded", to: "/prem-awarded" },
+        { label: "Apply for Premium", to: "/my-premium-pitches" },
+        { label: "View Applicants", to: "/premium-fixtures" },
+        { label: "Successful Applicants", to: "/prem-awarded" },
         { label: "Historical List", to: "/prem-attendees" },
       ],
     },
     {
       name: "Corporate Area",
       links: [
-        { label: "Corporate Application", to: "/my-corporate-pitches" },
+        { label: "Apply for Corporate", to: "/my-corporate-pitches" },
         { label: "View Applicants", to: "/corporate-fixtures" },
-        { label: "Applicants Awarded", to: "/corp-awarded" },
+        { label: "Successful Applicants", to: "/corp-awarded" },
         { label: "Historical List", to: "/corp-attendees" },
       ],
     },

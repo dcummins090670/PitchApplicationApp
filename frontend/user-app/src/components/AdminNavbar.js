@@ -29,7 +29,7 @@ function AdminNavBar() {
     {
       name: "Premium Area",
       links: [
-        { label: "Add Premium Fixture", to: "/premium-area" },
+        { label: "Add a Premium Fixture", to: "/premium-area" },
         { label: "View Applicants", to: "/premium-fixtures" },
         { label: "Assign Premium Pitches", to: "/prem-attendance" },
         { label: "Historical List", to: "/prem-attendees" },
@@ -38,7 +38,7 @@ function AdminNavBar() {
     {
       name: "Corporate Area",
       links: [
-        { label: "Add Corporate Fixture", to: "corporate-area" },
+        { label: "Add a Corporate Fixture", to: "corporate-area" },
         { label: "View Applicants", to: "/corporate-fixtures" },
         { label: "Assign Corporate Pitches", to: "/corp-attendance" },
         { label: "Historical List", to: "/corp-attendees" },
@@ -47,9 +47,9 @@ function AdminNavBar() {
     {
       name: "Admin",
       links: [
-        { label: "Edit Fixture List", to: "/admin-fixtures" },
-        { label: "Edit Bookmaker List", to: "/admin-bookmakers" },
-        { label: "Update Pitch Ownership", to: "/admin-pitches" }, 
+        { label: "Edit Fixture List", to: "/test" },
+        { label: "Edit Bookmaker List", to: "/test" },
+        { label: "Update Pitch Ownership", to: "/test" }, 
       ],
     },
   ];

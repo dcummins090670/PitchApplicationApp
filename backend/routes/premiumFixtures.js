@@ -66,7 +66,6 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
     }
 );  
 
-
 // Get all premium fixtures with racecourse name
     router.get('/', async (req, res) => {
         //const fixtureId = req.params.fixtureId;
@@ -316,7 +315,6 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
                 DO UPDATE SET location = EXCLUDED.location`,
                 [fixtureId, pitchId, racecourseId, location]
             );
-            
             res.json({message: `Location updated to '${location}' for Pitch ${pitchId} at racecourse ${racecourseId} in Fixture ${fixtureId}` });
         } catch (err) {
             console.error(err);
@@ -407,7 +405,6 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
                 }
     });
     
-/*
 // Get attended pitches for a specific fixture
     router.get('/:fixtureId/awarded-pitches', async (req, res) => {
         const { fixtureId } = req.params;
@@ -445,6 +442,11 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
 
 
 
+
+module.exports = router;    
+
+/*
+
   // Add new fixture
     router.post('/', authenticateToken, authorizeRoles('admin'), async (req, res) => {
         const { fixtureDate, racecourseId } = req.body;
@@ -472,41 +474,7 @@ router.get('/:fixtureId/premium-pitches', async (req, res) => {
             }
         });
 
-// Update premiumArea for a fixture (Admin only)
-    router.put('/:fixtureId/premiumPitches',authenticateToken,authorizeRoles('admin'),async (req, res) => {
-        const { fixtureId } = req.params;
-        const { numberOfPremiumPitches } = req.body;      
-    
 
-        try {
-            // Get fixture date
-            const fixture = await db.query(
-                `SELECT *
-                    FROM fixture f
-                    JOIN racecourse r ON r.racecourse_id = f.racecourse_id
-                    WHERE f.fixture_id = $1`,
-                [fixtureId]
-            );
-            const fixtureRows = fixture.rows;
-            if (fixtureRows.length === 0) {
-            return res.status(404).json({ error: 'Fixture not found' });
-        }
-
-            // Insert new row if not exists, else update
-             await db.query(
-                `UPDATE fixture 
-                 SET number_of_premium_pitches = $2
-                 WHERE fixture_id = $1`,
-                [fixtureId, numberOfPremiumPitches]
-            );
-            
-            res.json({message: `Premium Area Avaiable updated to '${numberOfPremiumPitches}' in Fixture ${fixtureId}` });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: err});
-        }
-    }
-);    
    
 */
-module.exports = router;
+

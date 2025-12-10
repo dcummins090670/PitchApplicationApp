@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { formatDate } from "../utils/dateUtils";
 function AttendeesPage() {
   const [fixtures, setFixtures] = useState([]);
+  const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
@@ -11,7 +12,7 @@ function AttendeesPage() {
        const fetchFixtures = async () => {
          try {
            const token = localStorage.getItem("token");
-           const response = await fetch(`${API_BASE_URL}/api/fixtures/currentyear`,        
+           const response = await fetch(`${API_BASE_URL}/api/fixtures/previousMonth`,        
            {    
              headers: {
                Authorization: `Bearer ${token}`,
@@ -32,6 +33,8 @@ function AttendeesPage() {
     
   const handleFixtureChange = async (e) => {
     const fixtureId = e.target.value;
+    const fixture = fixtures.find((f) => f.fixture_id.toString() === fixtureId);
+    setSelectedFixture(fixture || null);
         
     if (fixtureId) {
       await fetchPitches(fixtureId);
@@ -62,7 +65,7 @@ function AttendeesPage() {
 
     return (
   <div className="p-4">
-    <h1 className="text-xl font-bold mb-4">2025 Fixtures</h1>
+    <h1 className="text-xl font-bold mb-4">Fixtures - Previous 30 days</h1>
     
     <select
         onChange={handleFixtureChange}
@@ -89,7 +92,7 @@ function AttendeesPage() {
       <div className="mt-6 overflow-x-auto">
             {/* Attendance Summary Section */}
             <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-3">Attendance Summary</h2>
+              <h2 className="text-2xl font-bold mb-3">Attendance Summary for {selectedFixture.name} - {formatDate(selectedFixture.fixture_date)}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
 
@@ -133,7 +136,7 @@ function AttendeesPage() {
           </thead>
           <tbody>
             {pitches.map((p) => (
-              <tr key={p.pitch_id} className="hover:bg-red-200">
+              <tr key={p.pitch_id} className="hover:bg-gray-100">
                 <td className="border px-4 py-2">{p.pitch_label}</td> 
                 <td className="border px-4 py-2">{p.bookmaker_name}</td> 
                 <td className="border px-4 py-2">{p.pitch_no}</td>               

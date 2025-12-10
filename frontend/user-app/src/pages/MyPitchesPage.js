@@ -103,7 +103,7 @@ return (
           </thead>
           <tbody>
             {fixtures.map((fixture, index) => (
-              <tr key={index} className={`hover:bg-red-100 ${
+              <tr key={index} className={`hover:bg-gray-200 ${
               fixture.status === "Applied" ? "bg-green-300": "bg-gray-300"
             }`} // Change background colour of the row to green if fixture.status has applied to work
           >

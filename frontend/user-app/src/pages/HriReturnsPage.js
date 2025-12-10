@@ -37,7 +37,7 @@ function HriReturns({token}) {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`${API_BASE_URL}/api/fixtures/upcoming`,        
+        const response = await fetch(`${API_BASE_URL}/api/fixtures/previousMonth`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,

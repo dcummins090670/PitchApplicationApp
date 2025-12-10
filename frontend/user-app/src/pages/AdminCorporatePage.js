@@ -80,7 +80,6 @@ function AdminCorporatePage() {
       
     }
   };
-
   const handleNumberOfPitches = async (fixtureId, newValue) => {
   try {
     const token = localStorage.getItem("token");
@@ -126,7 +125,7 @@ function AdminCorporatePage() {
 
  return (
   <div className="p-4">
-          <h1 className="text-xl font-bold p-2 mb-4">Update Corporate Area Fixtures</h1>
+          <h1 className="text-xl font-bold p-2 mb-4">Update Corporate Area Details</h1>
     {loading ? (
       <p>Loading fixtures...</p>
     ) : fixtures.length > 0 ? (

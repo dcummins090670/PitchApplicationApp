@@ -263,8 +263,8 @@ router.post("/:fixtureId/attendance-list", async (req, res) => {
             }
         });   
        
-// Get all pitches for this years fixture (Bookmaker/SIS/Admin)
-router.get('/currentyear', async (req, res) => {
+//ATTENDANCE LIST for LAST 3 MONTHS
+router.get('/previousMonth', async (req, res) => {
        // const fixtureId = req.params.fixtureId;
 
         try {
@@ -275,8 +275,9 @@ router.get('/currentyear', async (req, res) => {
                 r.name
                 FROM fixture f
                 JOIN racecourse r ON f.racecourse_id = r.racecourse_id
-                WHERE f.fixture_date >= CURRENT_DATE
-                ORDER BY f.fixture_date ASC`
+                WHERE f.fixture_date BETWEEN CURRENT_DATE - INTERVAL '90 days' 
+                         AND CURRENT_DATE
+                ORDER BY f.fixture_date DESC`
             );
             const results = result.rows;
             res.json(results);

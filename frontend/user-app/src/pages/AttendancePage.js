@@ -7,14 +7,14 @@ function AttendancePage() {
   const [selectedFixture, setSelectedFixture] = useState("");
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`${API_BASE_URL}/api/fixtures/upcoming`,        
+        const response = await fetch(`${API_BASE_URL}/api/fixtures/previousMonth`,        
         {    
           headers: {
             Authorization: `Bearer ${token}`,
@@ -161,7 +161,7 @@ function AttendancePage() {
       
  return (
   <div className="p-4">
-    <h1 className="text-xl font-bold mb-4">Upcoming Fixtures</h1>
+    <h1 className="text-xl font-bold mb-4">Attendance Confirmation - Select Fixture</h1>
     
     <select
         onChange={handleFixtureChange}
@@ -239,7 +239,7 @@ function AttendancePage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitch_id} className={`hover:bg-red-50 ${
+                <tr key={p.pitch_id} className={`hover:bg-gray-100 ${
                   p.attendance === "Attended" ? "bg-green-200" : "bg-gray-300"
                   }`} // Change background colour of the row to green if fixture.status has applied to work
                 >
