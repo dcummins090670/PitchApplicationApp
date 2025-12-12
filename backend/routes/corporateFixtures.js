@@ -418,7 +418,7 @@ router.post("/:fixtureId/attendance-list", async (req, res) => {
                     u.name AS bookmaker_name,
                     u.permit_no,
                     r.name AS racecourse,
-                    r.racecourseId,
+                    r.racecourse_id,
                     CAST(f.fixture_date AS DATE) AS fixture_date,
                     COALESCE(cfp.location, 'Main Ring') AS location,
                     COALESCE(cfp.corporate_status, 'Not Applying') AS corporate_status

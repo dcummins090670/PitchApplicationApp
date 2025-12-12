@@ -83,11 +83,46 @@ function PremiumPitchPage() {
 
  return (
   <div className="p-4">
-        <h1 className="text-xl font-bold p-2 mb-4">Premium Pitches Avaiable - Please click to Apply</h1>
+        <h1 className="text-xl font-bold p-2 mb-4">Premium Pitches Available - Please click to Apply</h1>
       {loading ? (
       <p>Loading premium fixtures...</p>
     ) : fixtures.length > 0 ? (
-      <div className="overflow-x-auto">
+     <div className="mt-6 overflow-x-auto">  
+
+            {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {fixtures.map((fixture, index) => (
+                <div
+                  key={index}
+                  className={`p-4 rounded-xl shadow border 
+                  ${fixture.premium_status === "Applied" ? "bg-orange-200" : "bg-gray-300"}`}
+                >
+                  <p className="text-lg font-semibold">{fixture.racecourse_name} - {formatDate(fixture.fixture_date)}</p>
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium">Location:</span> {fixture.pitch_label}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium">Pitch No:</span> {fixture.pitch_no}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium"></span> <select value={fixture.premium_status || ""}
+                      onChange={(e) => handlePremiumStatusChange(
+                          fixture.fixture_id,
+                          fixture.pitch_id,
+                          fixture.racecourse_id,
+                          e.target.value,
+                          fixture.premium_status // keep old value in case backend rejects
+                        )}className="border px-2 sm:px-4 py-2" >
+                      <option value="">-- Select Option--</option>
+                      <option value="Not Applying">Stay in Main Ring</option>
+                      <option value="Applied">Apply to Work Premium</option>
+                    </select>
+                  </p>
+                </div>
+              ))}
+            </div>
+
+         {/* Table of pitches */} 
         <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
           <thead>
             <tr className="text-white bg-orange-900">

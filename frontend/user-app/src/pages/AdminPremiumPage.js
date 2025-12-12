@@ -128,6 +128,74 @@ const handleNumberOfPitches = async (fixtureId, newValue) => {
     {loading ? (
       <p>Loading fixtures...</p>
     ) : fixtures.length > 0 ? (
+      <div className="mt-6 overflow-x-auto">
+            {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {fixtures.map((f) => (
+                <div
+                  key={f.fixture_id}
+                  className={`p-4 rounded-xl shadow-md border relative 
+                  ${f.premium_area_available ? "bg-orange-100 border-orange-300" : "bg-gray-100 border-gray-300"}`}
+                >
+                  {/* Header */}
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-lg font-semibold">{f.name} - {formatDate(f.fixture_date)}</p>
+                  </div>
+
+                  {/* Premium toggle */}
+                  <div className="flex items-center justify-between py-2">
+                    <span className="font-medium text-gray-800 text-sm">Premium Fixture</span> 
+                     <label className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={!!f.premium_area_available}
+                        onChange={(e) => {
+                          const newValue = e.target.checked;
+                          handlePremiumArea(
+                            f.fixture_id,
+                            newValue,
+                            f.premium_area_available // keep old value in case backend rejects
+                            
+                          );
+                        }}
+                        className="w-5 h-5 accent-green-600"
+                      />
+                      <span className="text-sm text-gray-700">{f.premium_area_available ? "Yes" : " "}</span>
+                    </label> 
+                  </div> 
+
+                    {/* Number of pitches */}
+                    <div className="flex items-center justify-between py-2 border-t border-gray-300 mt-2">
+                      <span className="font-medium text-gray-800 text-sm">No. of Pitches</span>
+                      <select
+                        className="border border-gray-400 rounded-lg px-2 py-1 bg-white text-sm"
+                        value={editPitches[f.fixture_id] ?? f.number_of_premium_pitches ?? 0}
+                        onChange={(e) => {
+                          const newValue = Number(e.target.value);
+
+                          // save temp value locally
+                          setEditPitches((prev) => ({
+                            ...prev,
+                            [f.fixture_id]: newValue,
+                          }));
+
+                          // send update to backend
+                          handleNumberOfPitches(f.fixture_id, newValue);
+                        }}
+                        >
+                        {[...Array(11).keys()].map((n) => (
+                          <option key={n} value={n}>
+                            {n}
+                          </option>
+                        ))}
+                      </select>  
+                    </div>
+
+                </div>
+              ))}
+            </div>
+
+        {/* Table of pitches */} 
         <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
             <thead>
               <tr className="text-white bg-orange-900">
@@ -193,6 +261,7 @@ const handleNumberOfPitches = async (fixtureId, newValue) => {
               ))}
             </tbody>
         </table>
+       </div> 
         ) : (
       <p>No fixtures found.</p>
     )}

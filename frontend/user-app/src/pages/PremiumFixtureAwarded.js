@@ -86,32 +86,50 @@ function PremiumFixtureAwarded() {
     ) : ( 
     /* Table of pitches */
       pitches.length > 0 && (
-        /*<div className="mt-6 overflow-x-auto">
-            <h2 className="text-lg font-bold mb-2">Pitches at Fixture</h2>*/
+        <div className="mt-6 overflow-x-auto">
+        
+        {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {pitches.map((p) => (
+                <div
+                  key={p.pitch_id}
+                  className={`p-4 rounded-xl shadow border 
+                  ${p.location === "Premium Area" ? "bg-orange-100" : "bg-gray-300"}`}
+                >
+                  <p className="text-lg font-semibold">{p.bookmaker_name}</p>
+                  <p className="text-medium">
+                    <span className="font-medium">Location:</span> {p.pitch_label}  ({p.pitch_no})
+                  </p>
+                  
+                </div>
+              ))}
+            </div>
+
+         {/* Table of pitches */}   
           <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
             <thead>
               <tr className="text-white bg-orange-900">
                 <th className="border px-2 sm:px-4 py-2 text-left">Bookmaker</th>
-                <th className="border px-2 sm:px-4 py-2 text-left">Pitch Relocated</th>
-                <th className="border px-2 sm:px-4 py-2 text-left">Premium Area</th>
+                <th className="border px-2 sm:px-4 py-2 text-left">Pitch Location</th>
+                <th className="border px-2 sm:px-4 py-2 text-left">Pitch No</th>
                 
               </tr>
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitch_id} className={`hover:bg-red-100 ${
-                p.premiumstatus === "Applied" ? "bg-orange-100" : "bg-gray-200"
+                <tr key={p.pitch_id} className={`hover:bg-gray-100 ${
+                p.location === "Premium Area" ? "bg-orange-100" : "bg-gray-300"
                 }`} // Change background colour of the row to yellow if fixture.status has applied to work
                 > 
                   <td className="border px-2 sm:px-4 py-2">{p.bookmaker_name}</td>
                   <td className="border px-2 sm:px-4 py-2">{p.pitch_label}</td>
-                  <td className="border px-2 sm:px-4 py-2">{p.location}</td>
+                  <td className="border px-2 sm:px-4 py-2">{p.pitch_no}</td>
                   
                 </tr>
               ))}
             </tbody>
           </table>
-        /*</div>*/
+        </div>
       )
     )}
     </div>

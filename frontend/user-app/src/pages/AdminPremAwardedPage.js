@@ -182,8 +182,51 @@ function AdminPremAwardedPage() {
     ) : ( 
     /* Table of pitches */
       pitches.length > 0 && (
-        /*<div className="mt-6 overflow-x-auto">
-            <h2 className="text-lg font-bold mb-2">Pitches at Fixture</h2>*/
+        <div className="mt-6 overflow-x-auto">
+              {/*<h2 className="text-lg font-bold mb-2">Pitches at Fixture</h2>*/}
+            {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {pitches.map((p) => (
+                <div
+                  key={p.pitch_id}
+                  className={`p-4 rounded-xl shadow-md border relative mb-4
+                  ${p.location === "Premium Area" ? "bg-orange-200" : "bg-gray-300"}`}
+                >
+                  {/* Header */}
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-lg font-semibold">{p.bookmaker_name} - {p.pitch_label} {p.pitch_no}</p>
+                  </div> 
+                  {/* Date Used */} 
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-md font-semibold text-orange-800 ">Date Last Used:  {p.last_day_used ? new Date(p.last_day_used).toLocaleDateString() : 'Not Used'}</p>
+                  </div>
+                  {/* Attendance Checkbox*/}
+                  <div className="flex items-center space-x-2">  
+                  <span className="text-lg font-semibold">Award Premium Pitch:</span>  
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={p.location === "Premium Area"}
+                        onChange={(e) => {
+                          const newValue = e.target.checked ? "Premium Area" : "Main Ring";
+                          handlePremiumStatus(
+                            selectedFixture,
+                            p.pitch_id,
+                            p.racecourse_id,
+                            newValue,
+                            p.location // keep old value in case of API failure
+                          );
+                        }}
+                        className="w-5 h-5 accent-green-600"
+                      />
+                       <span className="text-sm text-gray-700"></span>
+                    </label>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+         {/* Table of pitches */}             
           <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
             <thead>
               <tr className="text-white bg-orange-900">
@@ -228,7 +271,7 @@ function AdminPremAwardedPage() {
               ))}
             </tbody>
           </table>
-        /*</div>*/
+      </div>
       )
     )}
     <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"     

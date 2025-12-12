@@ -120,7 +120,24 @@ function AttendeesPage() {
               </div>
             </div>  
         
-        
+        {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {pitches.map((p) => (
+                <div
+                  key={p.pitch_id}
+                  className={`p-4 rounded-xl shadow border 
+                  ${p.status === "Applied" ? "bg-green-200" : "bg-gray-100"}`}
+                >
+                  <p className="text-lg font-semibold">{p.pitch_label}</p>
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium">Bookmaker:</span> {p.bookmaker_name}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium">Pitch No:</span> {p.pitch_no}
+                  </p>
+                </div>
+              ))}
+            </div>
         
         
         

@@ -80,6 +80,24 @@ function CorporateAttendeesPage() {
       ) : (
         /* Table of pitches */
       attendees.length > 0 && (
+      <div className="mt-6 overflow-x-auto"> 
+
+          {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {attendees.map((a) => (
+                <div
+                  key={a.id}
+                  className={`p-4 rounded-xl shadow border bg-red-100`}
+                >
+                  <p className="text-lg font-semibold"> {formatDate(a.fixture_date)} - {a.name} </p>
+                  <p className="text-medium text-gray-700">
+                    <span className="font-medium">Pitch:</span> {a.location}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+        {/* Table of pitches */}         
         
         <table className="hidden sm:table border-separate bg-red-100 rounded-lg w-full">
           <thead>
@@ -101,6 +119,7 @@ function CorporateAttendeesPage() {
             ))}
           </tbody>
         </table>
+       </div> 
       )
     )}
     </div>

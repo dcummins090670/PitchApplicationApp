@@ -129,7 +129,24 @@ function CorporateFixturesPage() {
                   </div>
                 </div>
               </div>  
+          {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {pitches.map((p) => (
+                <div
+                  key={p.pitch_id}
+                  className={`p-4 rounded-xl shadow border 
+                  ${p.corporate_status === "Applied" ? "bg-gray-100" : "bg-gray-500"}`}
+                >
+                  <p className="text-lg font-semibold"> {p.bookmaker_name}: {p.pitch_label} ({p.pitch_no}) </p>
+                  
+                  <p className="text-medium text-orange-700">
+                    <span className="font-medium">Last Day Used:</span> {p.last_day_used ? new Date(p.last_day_used).toLocaleDateString() : 'Not Used'}
+                  </p>
+                </div>
+              ))}
+            </div>
 
+          {/* Table of pitches */}               
 
           <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
             <thead>
@@ -143,8 +160,8 @@ function CorporateFixturesPage() {
             </thead>
             <tbody>
               {pitches.map((p) => (
-                <tr key={p.pitchid} className={`hover:bg-gray-200 ${
-                p.corporatestatus === "Applied" ? "bg-red-200" : "bg-gray-300"
+                <tr key={p.pitchid} className={`hover:bg-gray-100 ${
+                p.corporate_status === "Applied" ? "bg-red-100" : "bg-gray-300"
                 }`} // Change background colour of the row to yellow if fixture.status has applied to work
                 > 
                   <td className="border px-4 py-2">{p.pitch_label}</td>

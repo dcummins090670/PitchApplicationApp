@@ -224,7 +224,40 @@ function AttendancePage() {
               </div>
             </div>  
         
-
+            {/* Mobile Pitch Cards */}
+            <div className="sm:hidden space-y-4 mt-4">
+              {pitches.map((p) => (
+                <div
+                  key={p.pitch_id}
+                  className={`p-4 rounded-xl shadow border 
+                  ${p.status === "Applied" ? "bg-green-200" : "bg-gray-100"}`}
+                >
+                  <p className="text-lg font-semibold">{p.bookmaker_name}</p>
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium"></span> {p.pitch_label}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={p.attendance === "Attended"}
+                        onChange={(e) => {
+                          const newValue = e.target.checked ? "Attended" : "Did Not Attend";
+                          handleAttendance(
+                            selectedFixture,
+                            p.pitch_id,
+                            newValue,
+                            p.attendance // keep old value in case of API failure
+                          );
+                        }}
+                        className="w-5 h-5 accent-green-600"
+                      />
+                      <span>{p.attendance === "Attended" ? "Attended" : " "}</span>
+                    </label>
+                  </p>
+                </div>
+              ))}
+            </div>                    
             
           {/* Table of pitches */}  
           <table className="hidden sm:table border-separate bg-gray-300 rounded-lg w-full">
